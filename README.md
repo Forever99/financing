@@ -17,3 +17,84 @@
   + b)提醒功能：在心愿单设置到期 提醒功能
   + c)分享到微信：至于要分享什么，到时候在想
   + d)可以用第三方社交id登录系统：比如微信、qq等
+
+5. ###数据库设计
+  create database financing;
+  use finacing;
+  + a)用户表
+      create table user(
+      id int not null primary key comment '用户id主键',
+      username varchar(255) not null comment '用户名',
+      password varchar(50) not null comment '密码',
+      email varchar(100) comment '邮箱'
+      )Engine=Innodb default charset=utf8;
+  + b)消费类别表
+      create table spend_category(
+        id int not null primary key comment '主键',
+        name varchar(100) not null comment '类别名称'
+      )engine InnoDB default charset=utf8;
+  + c)消费记录表
+    create table spend_record(
+      id int not null primary key,
+      spendnum int not null comment '消费金额',
+      date Date not null comment '消费日期',
+      s_comment varchar(255) comment '消费备注',
+      user_id int,
+      s_category_id,
+      foreign key (user_id) references user(id),
+      foreign key (s_category_id) references spend_category(id)
+      )Engine=InnoDB default charset=utf8;
+   + d) 收入类别表
+      create table income_category(
+        id int not null primary key,
+        name varchar(255) not null comment '收入分类名'
+      )Engine=Innodb default charset=utf8;
+   + e)收入记录表
+    create table income_record(
+    id int not null primary key,
+    incomenum int not null comment '收入金额',
+    i_comment varchar(255) comment '输入备注',
+    date Date not null,
+    user_id int comment '属于哪个用户',
+    i_category_id int comment '属于哪个收入类型',
+    foreign key (user_id) references user(id),
+    foreign key (i_category_id) references income_category(id)
+    )Engine=InnoDB default charset=utf8;
+  + f)月消费记录表
+  create table month_spend_record(
+    id int not null primary key,
+    totalnum int not null comment '月消费总额',
+    date Date not null,
+    s_category_id int comment '消费类别',
+    user_id int comment '属于哪个用户',
+    foreign key (s_category_id) references spend_category(id),
+    foreign key (user_id) references user(id)
+   )Engine=InnoDB default charset=utf8;
+   + g)年消费记录表
+   create table year_spend_record(
+    id int not null primary key,
+    totalnum int not null comment '年消费总额',
+    date Date not null,
+    s_category_id int comment '消费类别',
+    user_id int comment '属于哪个用户',
+    foreign key (s_category_id) references spend_category(id),
+    foreign key (user_id) references user(id)
+   )Engine=InnoDB default charset=utf8;
+  + h)年收入记录表
+  create table year_income_record(
+  id int not null primary key,
+  totalnum int not null comment '年收入总额',
+  date Date not null,
+  i_category_id int comment '收入类别',
+  user_id int comment '属于哪个用户',
+  foreign key (i_category_id) references income_category(id),
+  foreign key (user_id) references user(id)
+  )Engine=InnoDB default charset=utf8;
+ + i)心愿单表
+ create table wishlist(
+  id int not null primary key,
+  w_comment varchar(255) comment '心愿单说明',
+  date Date not null,
+  user_id int not null,
+  foreign key (user_id) references user(id)
+  )engine=InnoDb default charset=utf8;
