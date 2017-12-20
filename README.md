@@ -23,7 +23,7 @@
   use finacing;
   a)用户表
       create table user(
-      id int not null primary key comment '用户id主键',
+      id int not null primary key auto_increment comment '用户id主键',
       username varchar(255) not null comment '用户名',
       password varchar(50) not null comment '密码',
       email varchar(100) comment '邮箱'
@@ -31,13 +31,13 @@
       
   b)消费类别表
       create table spend_category(
-        id int not null primary key comment '主键',
+        id int not null primary key auto_increment comment '主键',
         name varchar(100) not null comment '类别名称'
       )engine InnoDB default charset=utf8;
       
   c)消费记录表
     create table spend_record(
-      id int not null primary key,
+      id int not null primary key auto_increment,
       spendnum int not null comment '消费金额',
       date Date not null comment '消费日期',
       s_comment varchar(255) comment '消费备注',
@@ -49,13 +49,13 @@
       
    d) 收入类别表
       create table income_category(
-        id int not null primary key,
+        id int not null primary key auto_increment,
         name varchar(255) not null comment '收入分类名'
       )Engine=Innodb default charset=utf8;
       
    e)收入记录表
     create table income_record(
-    id int not null primary key,
+    id int not null primary key auto_increment,
     incomenum int not null comment '收入金额',
     i_comment varchar(255) comment '输入备注',
     date Date not null,
@@ -67,7 +67,7 @@
     
   f)月消费记录表
   create table month_spend_record(
-    id int not null primary key,
+    id int not null primary key auto_increment,
     totalnum int not null comment '月消费总额',
     date Date not null,
     s_category_id int comment '消费类别',
@@ -78,7 +78,7 @@
    
    g)年消费记录表
    create table year_spend_record(
-    id int not null primary key,
+    id int not null primary key auto_increment,
     totalnum int not null comment '年消费总额',
     date Date not null,
     s_category_id int comment '消费类别',
@@ -89,7 +89,7 @@
    
   h)年收入记录表
   create table year_income_record(
-  id int not null primary key,
+  id int not null primary key auto_increment,
   totalnum int not null comment '年收入总额',
   date Date not null,
   i_category_id int comment '收入类别',
@@ -100,7 +100,7 @@
   
  i)心愿单表
  create table wishlist(
-  id int not null primary key,
+  id int not null primary key auto_increment,
   w_comment varchar(255) comment '心愿单说明',
   date Date not null,
   user_id int not null,

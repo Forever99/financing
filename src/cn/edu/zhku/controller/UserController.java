@@ -19,7 +19,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping("index")
+	@RequestMapping("firstfont")
 	public String showpage() {
 		return "singInAndUp";
 	}
@@ -42,6 +42,7 @@ public class UserController {
 														// 用JSON.stringify(data)将json对象那个转换为json数据
 		String username = user.getUsername();
 		User user2 = userService.queryUserByUserName(username);
+		System.out.println("ajax:"+user2.getUsername());
 		if (user2 != null && !user2.getUsername().trim().equals(""))
 			return "{\"name\":\"1\"}";
 		else
@@ -49,8 +50,15 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "register", method = RequestMethod.POST)
-	public String register() {
-		return null;
+	public String register(User user) {
+		System.out.println(user.getUsername());
+		userService.addUser(user);
+		int num = user.getId();
+		System.out.println(num);
+		if(num!=0) {
+			return "index";
+		}
+		return "error";
 	}
 
 	@RequestMapping("logout")

@@ -7,4 +7,5 @@ import cn.edu.zhku.pojo.User;
 public interface UserMapper {
 	public List<User> queryAllUser();
 	public User queryUserByName(String username);
+	public void addUser(User user);
 }

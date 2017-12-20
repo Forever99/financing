@@ -48,7 +48,7 @@
 									contentType:"application/json;charset=utf-8",/* 发送数据给服务器时所用的内容类型	*/
 									success:function(data){ /* 当请求成功时运行的函数 */
 										if(data.name=="1"){
-											$(this).val("该用户已存在");
+											$("#registername").val("该用户已存在");
 										}
 									},
 									error:function(data){
@@ -63,6 +63,36 @@
 							}
 						});
 					});
+	
+	function checkpad(){
+		var value1 = $("#password1").val();
+		var value2 = $("#password2").val();
+		var value3 = $("#emailid").val();
+		var value4 = $("#registername").val();
+		if(value4==null || value4=="" || $.trim(value4).length==0){
+			alert("请输入用户名");
+			return false;
+		}
+		if(value1==null || value1=="" || $.trim(value1).length==0){
+			alert("请输入密码");
+			return false;
+		}
+		if(value2==null || value2=="" || $.trim(value2).length==0){
+			alert("请确定密码");
+			return false;
+		}
+		if(value1!=value2){
+			alert("两次密码不一致");
+			return false;
+		}
+		if(value3==null || value3=="" || $.trim(value3).length==0){
+			/* 还要进行正则表达式验证 代做 */
+			alert("请输入邮箱");
+			return false;
+		}
+		
+		return true;
+	}
 </script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <style type="text/css">
@@ -154,16 +184,16 @@
 			</div>
 
 			<div id="formdiv">
-				<form id="singinform" action="" method="post">
+				<form id="singinform" action="" method="post" >
 					<input type="text" class="form-control" name="username" placeholder="用户名">
 					<input type="password" class="form-control" name="password" placeholder="密码">
 					<button type="submit" class="btn btn-info" id="insubmit">登录</button>
 					<span id="spanpad">忘记密码？<a href="#">点这里</a></span>
 				</form>
-				<form id="singupform" action="${pageContext.request.contextPath }/user/register.action" method="post">
+				<form id="singupform" action="${pageContext.request.contextPath }/user/register.action" method="post" onsubmit="return checkpad();">
 					<input type="text" class="form-control" name="username" placeholder="用户名" id="registername">
-					<input type="password" class="form-control" name="password" placeholder="密码(字母数字等字符共6位数)">
-					<input type="password" class="form-control" name="password2" placeholder="确认密码">
+					<input type="password" class="form-control" name="password" placeholder="密码(字母数字等字符共6位数)" id="password1">
+					<input type="password" class="form-control" name="password2" placeholder="确认密码" id="password2">
 					<input type="text" class="form-control" name="email" placeholder="邮箱" id="emailid">
 					<button type="submit" class="btn btn-info" id="insubmit">注册</button>
 				</form>
