@@ -59,12 +59,53 @@
 						});
 						$("#emailid").blur(function(){
 							var inputvalue = $(this).val();
-							if(inputvalue==""){
+							if(inputvalue=="" || $.trim(inputvalue).length==0){
 								$(this).val("请输入邮箱");
 							}
 						});
+						$("#loginname").blur(function(){
+							var inputvalue = $(this).val();
+							if(inputvalue=="" || $.trim(inputvalue).length==0){
+								$(this).val("请输入用户名");
+								$(this).focus();
+							}
+						});
+						$("#password0").blur(function(){
+							var inputvalue = $(this).val();
+							if(inputvalue=="" || $.trim(inputvalue).length==0){
+								/* alert("请输入密码"); */
+							}
+						});
+						
+						/* 打开bootstrap 的 modal 窗口 */
+						$("#open_findpad").click(function(){
+						      $("#myModal").modal('show');
+						  });
+						$("#modal_find_username").blur(function(){
+							var inputvalue = $(this).val();
+							if(inputvalue=="" || $.trim($(this).val()).length==0){
+								$(this).val("用户名不能为空");
+							}else{
+								/* 如果用户名不为空 检查是否存在 该用户 用ajax异步更新数据 */
+								$.ajax({
+									url:"/financing/user/findUserAjax.action",/* 发送给服务器的url */
+									type:"post",
+									/* data:{"username":$(this).val()}, *//* 发送给服务器的数据 json数据 */
+									data:JSON.stringify({"username":$(this).val()}),
+									dataType:"json", /* 预期的服务器响应的数据 */
+									contentType:"application/json;charset=utf-8",/* 发送数据给服务器时所用的内容类型	*/
+									success:function(data){ /* 当请求成功时运行的函数 */
+										if(data.name=="0"){
+											$("#modal_find_username").val("该用户不存在");
+											$("#modal_find_username").focus();
+										}
+									},
+									error:function(data){
+									}
+								});
+							}
+						});
 					});
-	
 	function checkpad(){
 		var value1 = $("#password1").val();
 		var value2 = $("#password2").val();
@@ -76,10 +117,17 @@
 		}
 		if(value1==null || value1=="" || $.trim(value1).length==0){
 			alert("请输入密码");
+			$("#password1").focus();
+			return false;
+		}
+		if(value1!=null && value1!="" && $.trim(value1).length<6){
+			alert("密码需6位数");
+			$("#password1").focus();
 			return false;
 		}
 		if(value2==null || value2=="" || $.trim(value2).length==0){
 			alert("请确定密码");
+			$("#password2").focus();
 			return false;
 		}
 		if(value1!=value2){
@@ -166,6 +214,30 @@
 	float: right;
 	margin-right: 5px;
 }
+.msgdiv{
+	float:right;
+	background-color: blue;
+}
+
+#myModal{
+	width:350px;
+	
+	margin:auto;
+}
+.modal-dialog{
+	width:300px;
+	margin:auto;
+}
+#modal_form_div{
+	width:250px;
+	margin:auto;
+}
+
+#modal_form_div input{
+	width:250px;
+	margin-top:5px;
+}
+
 </style>
 
 <title>首页-理财记账</title>
@@ -185,11 +257,11 @@
 			</div>
 
 			<div id="formdiv">
-				<form id="singinform" action="" method="post" >
-					<input type="text" class="form-control" name="username" placeholder="用户名">
-					<input type="password" class="form-control" name="password" placeholder="密码">
+				<form id="singinform" action="${pageContext.request.contextPath }/user/login.action" method="post" >
+					<input type="text" class="form-control" name="username" placeholder="用户名" id="loginname">
+					<input type="password" class="form-control" name="password" placeholder="密码" id="password0">
 					<button type="submit" class="btn btn-info" id="insubmit">登录</button>
-					<span id="spanpad">忘记密码？<a href="#">点这里</a></span>
+					<span id="spanpad">忘记密码？<button type="button" class="btn btn-link" id="open_findpad">点这里</button></span>
 				</form>
 				<form id="singupform" action="${pageContext.request.contextPath }/user/register.action" method="post" onsubmit="return checkpad();">
 					<input type="text" class="form-control" name="username" placeholder="用户名" id="registername">
@@ -200,6 +272,33 @@
 				</form>
 			</div>
 		</div>
+		
+		<div class="modal fade" id="myModal">
+	<div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button data-dismiss="modal" class="close" type="button"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">找回密码</h4>
+          </div>
+          <div class="modal-body">
+            <!-- <p>问题描述</p>
+            <textarea class="form-control"></textarea> -->
+            <div id="modal_form_div">
+	            <form action="" method="post">
+	            	<input type="text" name="username" class="form-control" placeholder="输入用户名" id="modal_find_username">
+	            	<input type="text" name="email" class="form-control" placeholder="输入邮箱">
+	            	<input type="password" name="password" class="form-control" placeholder="输入新密码">
+	            </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+            <button class="btn btn-primary" id="submit" type="button">找回密码</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+</div>
+		
 	</div>
 </body>
 

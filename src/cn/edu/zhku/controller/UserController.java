@@ -42,7 +42,7 @@ public class UserController {
 			session.setAttribute("username", user1.getUsername());
 			return "index";
 		}
-		String msg = "登录失败，4秒后跳转到登录注册页面 <meta http-equiv=\"refresh\" content=\"4;url=/financing/user/firstfont.action\"></meta>";
+		String msg = "登录失败，3秒后跳转到登录注册页面 <meta http-equiv=\"refresh\" content=\"3;url=/financing/user/firstfont.action\"></meta>";
 		request.setAttribute("msg", msg);
 		return "error";
 	}
@@ -75,7 +75,7 @@ public class UserController {
 				return "index";
 			}
 		}
-		String msg = "该用户已存在，4秒后跳转到登录注册页面 <meta http-equiv=\"refresh\" content=\"4;url=/financing/user/firstfont.action\"></meta>";
+		String msg = "该用户已存在，3秒后跳转到登录注册页面 <meta http-equiv=\"refresh\" content=\"3;url=/financing/user/firstfont.action\"></meta>";
 		request.setAttribute("msg", msg);
 		return "error";
 	}
@@ -88,5 +88,10 @@ public class UserController {
 	@RequestMapping("updatePassword")
 	public String changePassword() {
 		return null;
+	}
+	
+	@RequestMapping(value="testhaha")
+	public String testhaha() {
+		return "test";
 	}
 }
