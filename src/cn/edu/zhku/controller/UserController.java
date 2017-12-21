@@ -2,6 +2,9 @@ package cn.edu.zhku.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,8 +35,16 @@ public class UserController {
 	}
 
 	@RequestMapping("login")
-	public String login() {
-		return null;
+	public String login(User user,HttpServletRequest request) {
+		User user1 = userService.singin(user);
+		HttpSession session = request.getSession();
+		if(user1!=null) {
+			session.setAttribute("username", user1.getUsername());
+			return "index";
+		}
+		String msg = "登录失败，4秒后跳转到登录注册页面 <meta http-equiv=\"refresh\" content=\"4;url=/financing/user/firstfont.action\"></meta>";
+		request.setAttribute("msg", msg);
+		return "error";
 	}
 	//实现 前端 用户注册时 是否已有该用户 在数据库中存在 ajax的异步操作
 	@RequestMapping(value = "findUserAjax", method = RequestMethod.POST)
@@ -42,7 +53,6 @@ public class UserController {
 														// 用JSON.stringify(data)将json对象那个转换为json数据
 		String username = user.getUsername();
 		User user2 = userService.queryUserByUserName(username);
-		System.out.println("ajax:"+user2.getUsername());
 		if (user2 != null && !user2.getUsername().trim().equals(""))
 			return "{\"name\":\"1\"}";
 		else
@@ -50,14 +60,23 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "register", method = RequestMethod.POST)
-	public String register(User user) {
-		System.out.println(user.getUsername());
-		userService.addUser(user);
-		int num = user.getId();
-		System.out.println(num);
-		if(num!=0) {
-			return "index";
+	public String register(User user,HttpServletRequest request) {
+		//虽然前台 用ajax 防止了 用户重复注册 但是 后台还是要防止
+		String username = user.getUsername();
+		User user2 = userService.queryUserByUserName(username);
+		HttpSession session = request.getSession();
+		if (user2 != null && !user2.getUsername().trim().equals("")) {
+			return "error";
+		}else {
+			userService.addUser(user);
+			int num = user.getId();
+			if(num!=0) {
+				session.setAttribute("username", user.getUsername());
+				return "index";
+			}
 		}
+		String msg = "该用户已存在，4秒后跳转到登录注册页面 <meta http-equiv=\"refresh\" content=\"4;url=/financing/user/firstfont.action\"></meta>";
+		request.setAttribute("msg", msg);
 		return "error";
 	}
 

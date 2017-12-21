@@ -49,6 +49,7 @@
 									success:function(data){ /* 当请求成功时运行的函数 */
 										if(data.name=="1"){
 											$("#registername").val("该用户已存在");
+											$("#registername").focus();
 										}
 									},
 									error:function(data){
@@ -105,7 +106,7 @@
 	margin: auto;
 	width: 350px;
 	height: 600px;
-	background-color: pink;
+	/* background-color: pink; */
 }
 
 #main-body-top {
@@ -116,7 +117,7 @@
 #changebtn {
 	width: 160px;
 	height: 32px;
-	background-color: gray;
+	/* background-color: gray; */
 	margin: auto;
 }
 
@@ -141,7 +142,7 @@
 	margin-top: 5px;
 	width: 340px;
 	height: 300px;
-	background-color: green;
+	/* background-color: green; */
 	width: 340px;
 }
 

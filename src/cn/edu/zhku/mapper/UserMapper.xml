@@ -3,17 +3,35 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.zhku.mapper.UserMapper">
-	<!-- 查询 所有用户-->
+	<!-- 查询 所有用户 -->
 	<select id="queryAllUser" resultType="User">
 		select * from user
 	</select>
-	<select id="queryUserByName" parameterType="java.lang.String" resultType="User">
+	<select id="queryUserSingin" parameterType="User" resultType="User">
+		select id,username,password,email from user where username=#{username}
+		and password=#{password}
+	</select>
+	<select id="queryUserByName" parameterType="java.lang.String"
+		resultType="User">
 		select * from user where username=#{username}
 	</select>
-	<!-- 添加用户   useGeneratedKeys开启后 jdbc会 获取自动增长的主键 赋值给keyProperty属性 -->
-	<insert id="addUser" parameterType="User" useGeneratedKeys="true" keyProperty="id" >
+	<!-- 添加用户 useGeneratedKeys开启后 jdbc会 获取自动增长的主键 赋值给keyProperty属性 -->
+	<insert id="addUser" parameterType="User" useGeneratedKeys="true"
+		keyProperty="id">
 		insert into user
 		(username,password,email)
 		values(#{username},#{password},#{email})
 	</insert>
+	
+	<update id="updateUserName" parameterType="User">
+		update user set username=#{username} where id=#{id}
+	</update>
+	<update id="updateUserPassword" parameterType="User">
+		update user set password=#{password} where id=#{id}
+	</update>
+	
+	<!-- 用来测试的
+	<update id="updateTestreturn" parameterType="java.lang.String">
+		update user set password=#{password}
+	</update> -->
 </mapper>
