@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.edu.zhku.pojo.User;
@@ -39,13 +40,19 @@ public class UserController {
 		User user1 = userService.singin(user);
 		HttpSession session = request.getSession();
 		if(user1!=null) {
-			session.setAttribute("username", user1.getUsername());
+			session.setAttribute("user", user1);
 			return "index";
 		}
 		String msg = "登录失败，3秒后跳转到登录注册页面 <meta http-equiv=\"refresh\" content=\"3;url=/financing/user/firstfont.action\"></meta>";
 		request.setAttribute("msg", msg);
-		return "error";
+		return "message";
 	}
+	//测试session 区分不同用户问题
+	/*@RequestMapping(value="index")
+	public String testsession() {
+		return "index";
+	}*/
+	
 	//实现 前端 用户注册时 是否已有该用户 在数据库中存在 ajax的异步操作
 	@RequestMapping(value = "findUserAjax", method = RequestMethod.POST)
 	@ResponseBody // 返回json数据给 前端 在前端的 ajax中 请求的json数据 data 要转换为 json字符串 而不是json对象
@@ -66,30 +73,47 @@ public class UserController {
 		User user2 = userService.queryUserByUserName(username);
 		HttpSession session = request.getSession();
 		if (user2 != null && !user2.getUsername().trim().equals("")) {
-			return "error";
+			return "message";
 		}else {
 			userService.addUser(user);
 			int num = user.getId();
 			if(num!=0) {
-				session.setAttribute("username", user.getUsername());
+				session.setAttribute("user", user);
 				return "index";
 			}
 		}
 		String msg = "该用户已存在，3秒后跳转到登录注册页面 <meta http-equiv=\"refresh\" content=\"3;url=/financing/user/firstfont.action\"></meta>";
 		request.setAttribute("msg", msg);
-		return "error";
+		return "message";
 	}
 
 	@RequestMapping("logout")
-	public String logout() {
-		return null;
+	public String logout(HttpServletRequest request) {
+		request.getSession().removeAttribute("user");
+		return "index";
 	}
 
-	@RequestMapping("updatePassword")
-	public String changePassword() {
-		return null;
+	@RequestMapping(value="updatePassword",method=RequestMethod.POST)
+	public String changePassword(User user,HttpServletRequest request) {
+		User user2 = userService.queryUserByUserName(user.getUsername());
+		user.setId(user2.getId());
+		int num = userService.updateUserPassword(user);
+		String msg = "密码修改失败，3秒后跳转到登录注册页面 <meta http-equiv=\\\"refresh\\\" content=\\\"3;url=/financing/user/firstfont.action\\\"></meta>";
+		if(num!=0) {
+			msg = "密码修改成功，3秒后跳转到登录注册页面 <meta http-equiv=\"refresh\" content=\"3;url=/financing/user/firstfont.action\"></meta>";
+		}
+		request.setAttribute("msg", msg);
+		return "message";
 	}
 	
+	//显示用户 个人 主页 包括 可以修改的页面
+	@RequestMapping(value="showuserPage")
+	public String showUserPage(@RequestParam(value="id") String id) {
+		int userId = Integer.parseInt(id);
+		User user = userService.queryUserById(userId);
+		//才发现 可以从session中取数据。。。。
+		return "userpage";
+	}
 	@RequestMapping(value="testhaha")
 	public String testhaha() {
 		return "test";

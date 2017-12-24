@@ -8,7 +8,7 @@
 <link href="${pageContext.request.contextPath }/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
 <script type="text/javascript" src="${pageContext.request.contextPath }/js/bootstrap/3.3.6/bootstrap.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>用户列表</title>
+<title>用户列表-理财通</title>
 </head>
 <body>
 <!-- <button class="btn btn-info">提交</button> -->

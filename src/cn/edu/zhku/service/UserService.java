@@ -12,4 +12,5 @@ public interface UserService {
 	int updateUserName(User user);
 	int updateUserPassword(User user);
 	/*int updateTestreturn(String password);测试 mybatis 更新操作 返回值 是否是 影响的行数 测试结果证明是的*/
+	User queryUserById(int id);
 }

@@ -39,5 +39,9 @@ public class UserServiceImpl implements UserService{
 	public int updateTestreturn(String password) {
 		return userMapper.updateTestreturn(password);
 	}*/
+	@Override
+	public User queryUserById(int id) {
+		return userMapper.queryUserById(id);
+	}
 
 }

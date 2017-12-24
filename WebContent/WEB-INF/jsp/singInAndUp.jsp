@@ -105,6 +105,8 @@
 								});
 							}
 						});
+						
+						
 					});
 	function checkpad(){
 		var value1 = $("#password1").val();
@@ -221,7 +223,6 @@
 
 #myModal{
 	width:350px;
-	
 	margin:auto;
 }
 .modal-dialog{
@@ -237,10 +238,12 @@
 	width:250px;
 	margin-top:5px;
 }
-
+#modal_dialog_pad{
+	margin-top:80px;
+}
 </style>
 
-<title>首页-理财记账</title>
+<title>登录注册-理财通</title>
 </head>
 <body>
 	<div id="index-main">
@@ -274,7 +277,7 @@
 		</div>
 		
 		<div class="modal fade" id="myModal">
-	<div class="modal-dialog">
+	<div class="modal-dialog" id="modal_dialog_pad">
         <div class="modal-content">
           <div class="modal-header">
             <button data-dismiss="modal" class="close" type="button"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
@@ -284,16 +287,16 @@
             <!-- <p>问题描述</p>
             <textarea class="form-control"></textarea> -->
             <div id="modal_form_div">
-	            <form action="" method="post">
+	            <form action="${pageContext.request.contextPath }/user/updatePassword.action" method="post">
 	            	<input type="text" name="username" class="form-control" placeholder="输入用户名" id="modal_find_username">
 	            	<input type="text" name="email" class="form-control" placeholder="输入邮箱">
 	            	<input type="password" name="password" class="form-control" placeholder="输入新密码">
-	            </form>
             </div>
           </div>
           <div class="modal-footer">
-            <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
-            <button class="btn btn-primary" id="submit" type="button">找回密码</button>
+            	<button class="btn btn-primary" id="submit" type="submit">找回密码</button>
+            </form>
+             <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

@@ -53,4 +53,10 @@ public class TestMybatis {
 		//以下 输入 2 说明 返回的值就是 被影响的 行数！!
 		/*System.out.println(userService.updateTestreturn(password));*/
 	}
+	@SuppressWarnings("unused")
+	@Test
+	public void test6() {
+		int id = 5;
+		User user = userService.queryUserById(id);
+	}
 }

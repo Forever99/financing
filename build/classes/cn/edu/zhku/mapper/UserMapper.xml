@@ -15,6 +15,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultType="User">
 		select * from user where username=#{username}
 	</select>
+	
+	<select id="queryUserById" parameterType="java.lang.Integer" resultType="User">
+		select id,username,password,email from user where id=#{id}
+	</select>
+	
 	<!-- 添加用户 useGeneratedKeys开启后 jdbc会 获取自动增长的主键 赋值给keyProperty属性 -->
 	<insert id="addUser" parameterType="User" useGeneratedKeys="true"
 		keyProperty="id">

@@ -12,4 +12,5 @@ public interface UserMapper {
 	public int updateUserName(User user);
 	public int updateUserPassword(User user);
 	/*public int updateTestreturn(String password);*/
+	public User queryUserById(int id);
 }
