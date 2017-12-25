@@ -1,5 +1,8 @@
 package cn.edu.zhku.test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,13 +12,18 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import cn.edu.zhku.pojo.SpendCategory;
+import cn.edu.zhku.pojo.SpendRecord;
 import cn.edu.zhku.pojo.User;
+import cn.edu.zhku.service.SpendService;
 import cn.edu.zhku.service.UserService;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations= {"classpath:spring/applicationContext-*.xml"})
 public class TestMybatis {
 	@Resource
 	private UserService userService;
+	@Resource
+	private SpendService spendService;
 	@Test
 	public void testuser1() {
 		@SuppressWarnings("unused")
@@ -58,5 +66,68 @@ public class TestMybatis {
 	public void test6() {
 		int id = 5;
 		User user = userService.queryUserById(id);
+	}
+	@Test//测试  消费类别 表 
+	public void testInsertS_cate() {
+		/*插入 成功
+		 * SpendCategory s_cate = new SpendCategory();
+		s_cate.setName("生活用品");
+		spendService.addSpendCate(s_cate);*/
+		//测试删除  删除 通过测试
+		/*int id = 3;
+		int num = spendService.deleteSpendCate(id);
+		System.out.println(num);*/
+		
+		//查询所有 测试  通过测试！ 
+		List<SpendCategory> list = spendService.queryAllSpendCate();
+		for(SpendCategory cate:list) {
+			System.out.print(cate.getName()+" ");
+		}
+	}
+	@Test//测试 插入 消费记录 表 
+	public void testInsertS_record() {
+		SpendRecord s_record = new SpendRecord(); 
+		s_record.setSpendnum(300);
+		System.out.println(new Date());
+		s_record.setDate(new Date());
+		s_record.setS_category_id(4);
+		s_record.setComment("测试时间");
+		s_record.setUser_id(3);
+		spendService.addSpendRecord(s_record);
+	}
+	@Test
+	public void testQueryS_record() {
+		List<SpendRecord> list = spendService.queryAllSpendRecord();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ");
+		Date date1 = new Date();
+		String datestr = sdf.format(date1);
+		Date date;
+		try {
+			date = sdf.parse(datestr);
+			spendService.queryApendRecordDate2(date);
+			for(SpendRecord spendRecord:list) {
+				System.out.print(sdf.format(spendRecord.getDate())+"时间条件 ");
+			}
+			SpendRecord sr = spendService.querySpendRecord(4);
+			System.out.println(sdf.format(sr.getDate()));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	@Test
+	public void testQueryS_recordDate() {
+		/*HashMap<String,String> map = new HashMap<String,String>();*/
+		/*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String date1 = sdf.format(new Date());*/
+		Date date = new Date();
+		System.out.println(date);
+		/*map.put("date", date);*/
+		List<SpendRecord> list = spendService.queryApendRecordDate2(date);
+		for(SpendRecord spendRecord:list) {
+			System.out.print(spendRecord.getComment()+" ");
+		}
+	
 	}
 }

@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.edu.zhku.pojo.SpendCategory;
 import cn.edu.zhku.pojo.User;
+import cn.edu.zhku.service.SpendService;
 import cn.edu.zhku.service.UserService;
 
 @Controller
@@ -22,6 +24,8 @@ import cn.edu.zhku.service.UserService;
 public class UserController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private SpendService spendService;
 
 	@RequestMapping("firstfont")
 	public String showpage() {
@@ -40,6 +44,9 @@ public class UserController {
 		User user1 = userService.singin(user);
 		HttpSession session = request.getSession();
 		if(user1!=null) {
+			//先做好 数据显示的准备
+			List<SpendCategory> listSpendCate = spendService.queryAllSpendCate();
+			session.setAttribute("cate", listSpendCate);
 			session.setAttribute("user", user1);
 			return "index";
 		}
@@ -78,7 +85,9 @@ public class UserController {
 			userService.addUser(user);
 			int num = user.getId();
 			if(num!=0) {
+				List<SpendCategory> listSpendCate = spendService.queryAllSpendCate();
 				session.setAttribute("user", user);
+				session.setAttribute("cate", listSpendCate);
 				return "index";
 			}
 		}
@@ -89,8 +98,10 @@ public class UserController {
 
 	@RequestMapping("logout")
 	public String logout(HttpServletRequest request) {
-		request.getSession().removeAttribute("user");
-		return "index";
+		HttpSession session = request.getSession();
+		session.removeAttribute("user");
+		session.removeAttribute("cate");
+		return "singInAndUp";
 	}
 
 	@RequestMapping(value="updatePassword",method=RequestMethod.POST)

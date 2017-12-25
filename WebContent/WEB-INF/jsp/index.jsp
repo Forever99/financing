@@ -78,6 +78,23 @@
 			}
 			return true;
 		});
+		/* 点击 添加 消费类别 弹出 添加 消费类别的模态框  */
+		$("#addSpendCateId").click(function(){
+			
+		});
+		
+		$("#submit_spend_info_btn").click(function(){
+			var spendnum = $("#spend_input_div").val();
+			var spendcate = $("#select_spend_cate").val(); 
+			if(spendnum==null || spendnum=='' || $.trim(spendnum).length==0){
+				alert("请输入消费金额");
+				return false;
+			}
+			if(spendcate=="选择类别" || spendcate==null || spendcate=="" || $.trim(spendcate).length==0){
+				alert("请选择消费类别");
+				return false;
+			}
+		});
 	});
 </script>
 <style>
@@ -171,7 +188,10 @@
 }
 p {
 	margin-left: 10px;
-	margin-top: 10px;
+	margin-top: 8px;
+}
+.input-group{
+	margin:10px;
 }
 </style>
 </head>
@@ -241,7 +261,7 @@ p {
 		</div>
 		<div id="nav_main_div">
 			<ul id="myTab" class="nav nav-tabs">
-				<li class="active" id="recordBook"><a  href="#dota"
+				<li class="active" id="recordBook"><a  href="#personRecord"
 					data-toggle="tab" id="a_id_test">个人账本</a></li>
 				<li class="dropdown"><a href="#" id="myTabDrop1"
 					class="dropdown-toggle" data-toggle="dropdown">记一笔 <b
@@ -259,20 +279,48 @@ p {
 						<li><a href="#incomeGraphs" tabindex="-1" data-toggle="tab">收入报表</a></li>
 					</ul>
 				</li>
-				<li><a href="#lol" data-toggle="tab">心愿单</a></li>
+				<li><a href="#wishList" data-toggle="tab">心愿单</a></li>
 			</ul>
 			<!-- id="myTabContent" -->
-			<div class="tab-content">
-				<div class="tab-pane fade in active" id="dota">
-					<p>《DotA》（Defense of the Ancients），可以译作守护古树、守护遗迹、远古遗迹守卫，
-						是由暴雪公司出品即时战略游戏《魔兽争霸3》的一款多人即时对战、自定义地图，可支持10个人同时连线游戏，是暴雪公司官方认可的魔兽争霸的RPG地图。</p>
-				</div>
-				<div class="tab-pane fade" id="lol">
-					<p>《英雄联盟》（简称lol）是由美国Riot Games开发，中国大陆地区由腾讯游戏运营的网络游戏。</p>
+			<div class="tab-content" style="background-color:pink;height:auto;">
+				<div class="tab-pane fade in active" id="personRecord" style="margin-top:5px;">
+					个人账簿
 				</div>
 				<div class="tab-pane fade" id="payout">
-					<p>支出细节</p>
-					<div style="background: green; height: 300px;">dfd</div>
+					<p><font style="color:#009fe8;font-size:16px;">支出细节</font></p>
+					<div style="height: 300px;width:600px;margin-left:50px;">
+						<form action="${pageContext.request.contextPath }/spend/addSpendRecord.action" method="post">
+							<!--要先 将 类别放到 request域中 -->
+							<input type="hidden" name="user_id" value="${sessionScope.user.id }">
+							<div class="input-group">
+							  <span class="input-group-addon">￥</span>
+							  <input id="spend_input_div" type="text" class="form-control" name="spendnum" placeholder="输入消费金额" aria-label="Amount (to the nearest dollar)">
+							  <span class="input-group-addon">.00</span>
+							</div>
+							
+							<div class="input-group">
+							  <textarea rows="6" cols="90" class="form-control" name="comment">消费记录备注</textarea>
+							</div>
+							
+							<div class="input-group">
+								<span class="input-group-addon">选择消费类别</span>
+								<label class="radio-inline" style="padding-left:0px;">
+								<select class="form-control" name="s_category_id" id="select_spend_cate">
+									<option>选择类别</option>
+									<c:forEach items="${sessionScope.cate }" var="cate">
+										<option value="${cate.id }">${cate.name}</option>
+									</c:forEach> 
+						 		</select>
+						 		</label>
+						 		<label class="radio-inline">
+						 			<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span>添加类别</button>
+						 		</label>
+							</div>
+							<div class="input-group" style="float:right;">
+								<button class="btn btn-primary" type="submit" id="submit_spend_info_btn">提交消费信息</button>
+							</div>
+						</form>
+					</div>
 					<!-- <p>《风暴英雄》 是由暴雪娱乐公司开发的一款运行在Windows和Mac OS上的在线多人竞技PC游戏。</p>
 					<p>
 						游戏中的英雄角色主要来自于暴雪三大经典游戏系列：《魔兽世界》、《暗黑破坏神》和《星际争霸》。它是一款道具收费的游戏，与《星际争霸Ⅱ》基于同一引擎开发。
@@ -288,6 +336,9 @@ p {
 				</div>
 				<div class="tab-pane fade" id="incomeGraphs">
 					<div style="background: red; height: 300px;"></div>
+				</div>
+				<div class="tab-pane fade" id="wishList">
+					<p>心愿单</p>
 				</div>
 			</div>
 		</div>
