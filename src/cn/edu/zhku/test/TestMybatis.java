@@ -12,9 +12,11 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import cn.edu.zhku.pojo.IncomeCategory;
 import cn.edu.zhku.pojo.SpendCategory;
 import cn.edu.zhku.pojo.SpendRecord;
 import cn.edu.zhku.pojo.User;
+import cn.edu.zhku.service.IncomeService;
 import cn.edu.zhku.service.SpendService;
 import cn.edu.zhku.service.UserService;
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,6 +26,8 @@ public class TestMybatis {
 	private UserService userService;
 	@Resource
 	private SpendService spendService;
+	@Resource
+	private IncomeService incomeService;
 	@Test
 	public void testuser1() {
 		@SuppressWarnings("unused")
@@ -130,4 +134,20 @@ public class TestMybatis {
 		}
 	
 	}
+	
+	//测试 收入类别
+	@Test
+	public void testI_cate() {
+		/*IncomeCategory incomeCate = new IncomeCategory();
+		incomeCate.setName("工资收入");
+		int num = incomeService.addIncomeCate(incomeCate);
+		System.out.println(num);*/
+		List<IncomeCategory> list = incomeService.queryAllIncomeCate();
+		for(IncomeCategory incomeCate2:list) {
+			System.out.print(incomeCate2.getName()+" ");
+		}
+	
+	}
+	
+	
 }

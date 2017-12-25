@@ -46,7 +46,7 @@ public class UserController {
 		if(user1!=null) {
 			//先做好 数据显示的准备
 			List<SpendCategory> listSpendCate = spendService.queryAllSpendCate();
-			session.setAttribute("cate", listSpendCate);
+			session.setAttribute("spendcate", listSpendCate);
 			session.setAttribute("user", user1);
 			return "index";
 		}
@@ -87,7 +87,7 @@ public class UserController {
 			if(num!=0) {
 				List<SpendCategory> listSpendCate = spendService.queryAllSpendCate();
 				session.setAttribute("user", user);
-				session.setAttribute("cate", listSpendCate);
+				session.setAttribute("spendcate", listSpendCate);
 				return "index";
 			}
 		}
@@ -100,7 +100,7 @@ public class UserController {
 	public String logout(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		session.removeAttribute("user");
-		session.removeAttribute("cate");
+		session.removeAttribute("spendcate");
 		return "singInAndUp";
 	}
 

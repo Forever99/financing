@@ -17,84 +17,134 @@
 </script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		/* $("#a_id_test").click(function(){
-			alert("点击了链接");
-		}); 
-		测试可以的
-		 */
 		/* 将 container div高度设置为 屏幕的高度 自动适应 */
 		$("#container").css("height", $(document).height());
 		$("#before_login_search_div").click(function(){
 			alert("你还没登录，请先登录后,再查询个人账簿信息");
 		});
 		
-		/* 打开登录模态框 */
+		/* 用来 判断 是要显示 登录 还是 注册 框 以便 用jq做动态控制 */
+		var singInUp = "";
+		/* 打开登录/注册 模态框  共用 一个 模态框 用 jq控制  减少 代码量 */
 		$("#before_login_singin_modal").click(function(){
-		      $("#myModal_login").modal('show');
+		      $("#myModal_singInUp").modal('show');
+		      singInUp = "singin";
+		      $("#modal_singInUpTitle").text("登录理财通");
+		      $("#modal_singInUpForm").attr("action","${pageContext.request.contextPath }/user/login.action");
+		      /* 如果是登录的话 那么就 将 后面的 两个 输入框 确定密码 输入邮箱 隐藏 */
+		      $("#modal_singInUp_pad2").hide();
+		      $("#modal_singInUp_email").hide();
+		      $("#modal_singInUpSubmit_btn").text("登录理财通");
 		  });
-		/* 检查 登录 输入框是否 有输入信息 */
-		$("#modal_submit_btn").click(function(){
-			var username = $("#modal_login_username").val();
-			var pad = $("#modal_login_pad").val();
-			if(username==null || username=="" || $.trim(username).length==0){
-				alert("请输入用户名");
-				return false;
-			}
-			if(pad==null || pad=="" || $.trim(pad).length==0){
-				alert("请输入密码");
-				return false;
-			}
-			return true;
-		});
-		/* 打开注册框 */
+		
 		$("#before_login_singout_modal").click(function(){
-			$("#myModal_singup").modal('show');
-		});
-		/* 检查注册 输入框是否 有输入信息 */
-		$("#modal_submit_btn2").click(function(){
-			var username = $("#modal_singup_username").val();
-			var pad1 = $("#modal_singup_pad").val();
-			var pad2 = $("#modal_singup_pad2").val();
-			var email = $("#modal_singup_email").val();
-			if(username==null || username=="" || $.trim(username).length==0){
-				alert("请输入用户名");
-				return false;
+		      $("#myModal_singInUp").modal('show');
+		      singInUp = "singup";
+		      $("#modal_singInUpTitle").text("加入理财通");
+		      $("#modal_singInUpForm").attr("action","${pageContext.request.contextPath }/user/register.action");
+		      /* 如果是登录的话 那么就 将 后面的 两个 输入框 确定密码 输入邮箱显示*/
+		      $("#modal_singInUp_pad2").show();
+		      $("#modal_singInUp_email").show();
+		      $("#modal_singInUpSubmit_btn").text("加入理财通");
+		  });
+		     
+		$("#modal_singInUpSubmit_btn").click(function(){
+			var username = $("#modal_singInUp_username").val();
+			var password = $("#modal_singInUp_pad").val();
+			var password2 = $("#modal_singInUp_pad2").val();
+			var email = $("#modal_singInUp_email").val();
+			if(singInUp == "singin"){
+				if(username==null || username=="" || $.trim(username).length==0){
+					alert("请输入用户名");
+					return false;
+				}
+				if(password==null || password=="" || $.trim(password).length==0){
+					alert("请输入密码");
+					return false;
+				}
 			}
-			if(pad1==null || pad1=="" || $.trim(pad1).length==0){
-				alert("请输入密码");
-				return false;
-			}
-			if(pad2==null || pad2=="" || $.trim(pad2).length==0){
-				alert("请确认密码");
-				return false;
-			}
-			if(email==null || email=="" || $.trim(email).length==0){
-				alert("请输入邮箱");
-				return false;
-			}
-			if(pad1!=pad2){
-				alert("两次密码输入不一致");
-				return false;
+			if(singInUp == "singup"){
+				if(username==null || username=="" || $.trim(username).length==0){
+					alert("请输入用户名");
+					return false;
+				}
+				if(password==null || password=="" || $.trim(password).length==0){
+					alert("请输入密码");
+					return false;
+				}
+				if(password2==null || password2=="" || $.trim(password2).length==0){
+					alert("请确认密码");
+					return false;
+				}
+				if(email==null || email=="" || $.trim(email).length==0){
+					alert("请输入邮箱");
+					return false;
+				}
+				if(password!=password2){
+					alert("两次密码不一致");
+					return false;
+				}
 			}
 			return true;
 		});
+		
+		/* 由于 好多 模态框是可以 复用的 所以 用jq 来 改变 以便需要变化的值 以减少 代码量 */
+		/* 添加 消费 类别 以及 收入类别 共用一个模态框 */
+		var modal_spend_income = "";
+		
 		/* 点击 添加 消费类别 弹出 添加 消费类别的模态框  */
 		$("#addSpendCateId").click(function(){
-			
+			$("#myModal_addCateModal").modal('show');
+			modal_spend_income = "spendCate";
+			$("#addCategoryTitle").text("添加消费类型");
+		});
+		
+		$("#addIncomeCateId").click(function(){
+			$("#myModal_addCateModal").modal('show');
+			modal_spend_income = "incomeCate";
+			$("#addCategoryTitle").text("添加收入类型");
+		});
+		
+		$("#modal_addCate_submitbtn").click(function(){
+			var Cateval = $("#modal_addCate_name").val();
+			if(Cateval==null || Cateval=='' || $.trim(Cateval).length==0){
+				alert("请输入类别名");
+				return false;
+			}else{
+				if(modal_spend_income == "spendCate"){
+					$("#addCateform").attr("action","${pageContext.request.contextPath }/spend/addSpendCate.action");
+				}
+				if(modal_spend_income == "incomeCate"){
+					$("#addCateform").attr("action","${pageContext.request.contextPath }/income/addIncomeCate.action");
+				}	
+			}
 		});
 		
 		$("#submit_spend_info_btn").click(function(){
 			var spendnum = $("#spend_input_div").val();
 			var spendcate = $("#select_spend_cate").val(); 
 			if(spendnum==null || spendnum=='' || $.trim(spendnum).length==0){
-				alert("请输入消费金额");
+				alert("请输入金额");
 				return false;
 			}
 			if(spendcate=="选择类别" || spendcate==null || spendcate=="" || $.trim(spendcate).length==0){
-				alert("请选择消费类别");
+				alert("请选择类别");
 				return false;
 			}
 		});
+		$("#submit_income_info_btn").click(function(){
+			var incomenum = $("#income_input_div").val();
+			var incomecate = $("#select_income_cate").val(); 
+			if(incomenum==null || incomenum=='' || $.trim(incomenum).length==0){
+				alert("请输入金额");
+				return false;
+			}
+			if(incomecate=="选择类别" || incomecate==null || incomecate=="" || $.trim(incomecate).length==0){
+				alert("请选择类别");
+				return false;
+			}
+		});
+		
 	});
 </script>
 <style>
@@ -154,11 +204,15 @@
 	margin-top:17px;
 }
 
-#myModal_login{
+#myModal_singInUp{
 	width:350px;
 	margin:auto;
 }
-#myModal_singup{
+/* #myModal_singup{
+	width:350px;
+	margin:auto;
+} */
+#myModal_addCateModal{
 	width:350px;
 	margin:auto;
 }
@@ -287,7 +341,7 @@ p {
 					个人账簿
 				</div>
 				<div class="tab-pane fade" id="payout">
-					<p><font style="color:#009fe8;font-size:16px;">支出细节</font></p>
+					<p><font style="color:#009fe8;font-size:16px;"><b>支出</b>细节</font></p>
 					<div style="height: 300px;width:600px;margin-left:50px;">
 						<form action="${pageContext.request.contextPath }/spend/addSpendRecord.action" method="post">
 							<!--要先 将 类别放到 request域中 -->
@@ -307,13 +361,13 @@ p {
 								<label class="radio-inline" style="padding-left:0px;">
 								<select class="form-control" name="s_category_id" id="select_spend_cate">
 									<option>选择类别</option>
-									<c:forEach items="${sessionScope.cate }" var="cate">
-										<option value="${cate.id }">${cate.name}</option>
+									<c:forEach items="${spendcate }" var="spendcate">
+										<option value="${spendcate.id }">${spendcate.name}</option>
 									</c:forEach> 
 						 		</select>
 						 		</label>
 						 		<label class="radio-inline">
-						 			<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span>添加类别</button>
+						 			<button type="button" class="btn btn-default" id="addSpendCateId"><span class="glyphicon glyphicon-plus"></span>添加类别</button>
 						 		</label>
 							</div>
 							<div class="input-group" style="float:right;">
@@ -321,14 +375,43 @@ p {
 							</div>
 						</form>
 					</div>
-					<!-- <p>《风暴英雄》 是由暴雪娱乐公司开发的一款运行在Windows和Mac OS上的在线多人竞技PC游戏。</p>
-					<p>
-						游戏中的英雄角色主要来自于暴雪三大经典游戏系列：《魔兽世界》、《暗黑破坏神》和《星际争霸》。它是一款道具收费的游戏，与《星际争霸Ⅱ》基于同一引擎开发。
-					</p> -->
 				</div>
 				<div class="tab-pane fade" id="income">
-					<p>《300英雄》是由上海跳跃网络科技有限公司自主研发，深圳中青宝互动网络股份有限公司运营的一款类DOTA网游。游戏以7v7组队对抗玩法为主，提供永恒战场和永恒竞技场两种经典模式任由玩家选择，并创新性地加入勇者斗恶龙、克隆战争等多种休闲娱乐玩法。
-					</p>
+					<p><font style="color:#009fe8;font-size:16px;"><b>收入</b>细节</font></p>
+					<div style="height: 300px;width:600px;margin-left:50px;">
+						<form action="${pageContext.request.contextPath }/income/addIncomeRecord.action" method="post">
+							<!--要先 将 类别放到 session域中 -->
+							<input type="hidden" name="user_id" value="${sessionScope.user.id }">
+							<div class="input-group">
+							  <span class="input-group-addon">￥</span>
+							  <input id="income_input_div" type="text" class="form-control" name="spendnum" placeholder="输入输入金额" aria-label="Amount (to the nearest dollar)">
+							  <span class="input-group-addon">.00</span>
+							</div>
+							
+							<div class="input-group">
+							  <textarea rows="6" cols="90" class="form-control" name="comment">收入备注</textarea>
+							</div>
+							
+							<div class="input-group">
+								<span class="input-group-addon">选择收入类别</span>
+								<label class="radio-inline" style="padding-left:0px;">
+								<select class="form-control" name="i_category_id" id="select_income_cate">
+									<option>选择类别</option>
+									<c:forEach items="${incomecate }" var="incomecate">
+										<option value="${incomecate.id }">${incomecate.name}</option>
+									</c:forEach> 
+						 		</select>
+						 		</label>
+						 		<label class="radio-inline">
+						 			<button type="button" class="btn btn-default" id="addIncomeCateId"><span class="glyphicon glyphicon-plus"></span>添加类别</button>
+						 		</label>
+							</div>
+							<div class="input-group" style="float:right;">        
+								<button class="btn btn-primary" type="submit" id="submit_income_info_btn">提交收入信息</button>
+							</div>
+						</form>
+					</div>
+					
 				</div>
 				<!-- 报表div -->
 				<div class="tab-pane fade" id="payoutGraphs">
@@ -343,25 +426,27 @@ p {
 			</div>
 		</div>
 		
-		<!-- bootstrap modal模态框  登录窗 -->
-		<div class="modal fade" id="myModal_login">
+		<!-- bootstrap modal模态框  登录/注册窗 -->
+		<div class="modal fade" id="myModal_singInUp">
 		<div class="modal-dialog" id="modal_dialog_pad">
        		<div class="modal-content">
 	          <div class="modal-header">
 	            <button data-dismiss="modal" class="close" type="button"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-	            <h4 class="modal-title" align="center">登录理财通</h4>
+	            <h4 class="modal-title" align="center" id="modal_singInUpTitle"><!--用jq来控制  登录理财通 --></h4>
 	          </div>
 	          <div class="modal-body">
-	            <!-- <p>问题描述</p>
-	            <textarea class="form-control"></textarea> -->
-	            <div id="modal_form_div">
-		            <form action="${pageContext.request.contextPath }/user/login.action" method="post">
-		            	<input type="text" name="username" class="form-control" placeholder="输入用户名" id="modal_login_username">
-		            	<input type="password" name="password" class="form-control" placeholder="输入6位数密码" id="modal_login_pad">
+	            <div id="modal_form_div">    <!--  jq来控制  ${pageContext.request.contextPath }/user/login.action -->
+		            <form action="" method="post" id="modal_singInUpForm"> 
+		            	<input type="text" name="username" class="form-control" placeholder="输入用户名" id="modal_singInUp_username">
+		            	<input type="password" name="password" class="form-control" placeholder="输入6位数密码" id="modal_singInUp_pad">
+		            	
+		            	<!-- 如果是  登录 那么 就用jq将 下面两个 输入框 隐藏  -->
+		            	<input type="password" name="password2" class="form-control" placeholder="确认密码" id="modal_singInUp_pad2">
+		            	<input type="text" name="email" class="form-control" placeholder="输入邮箱" id="modal_singInUp_email">
 	            </div>
 	          </div>
 	          <div class="modal-footer">
-	            		<button class="btn btn-primary" id="modal_submit_btn" type="submit">登录理财通</button>
+	            		<button class="btn btn-primary" id="modal_singInUpSubmit_btn" type="submit"><!--jq 动态控制 登录理财通 --></button>
 	            	</form>
 	             <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
 	          </div>
@@ -370,35 +455,30 @@ p {
 	</div>
 		
 		
-	<!-- bootstrap modal模态框  注册窗 -->
-		<div class="modal fade" id="myModal_singup">
-		<div class="modal-dialog" id="modal_dialog_pad">
-       		<div class="modal-content">
-	          <div class="modal-header">
-	            <button data-dismiss="modal" class="close" type="button"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-	            <h4 class="modal-title" align="center">加入理财通</h4>
-	          </div>
-	          <div class="modal-body">
-	            <!-- <p>问题描述</p>
-	            <textarea class="form-control"></textarea> -->
-	            <div id="modal_form_div">
-		            <form action="${pageContext.request.contextPath }/user/register.action" method="post">
-		            	<input type="text" name="username" class="form-control" placeholder="输入用户名" id="modal_singup_username">
-		            	<input type="password" name="password" class="form-control" placeholder="输入6位数密码" id="modal_singup_pad">
-		            	<input type="password" name="password2" class="form-control" placeholder="确认密码" id="modal_singup_pad2">
-		            	<input type="text" name="email" class="form-control" placeholder="输入邮箱" id="modal_singup_email">
-	            </div>
-	          </div>
-	          <div class="modal-footer">
-	            		<button class="btn btn-primary" id="modal_submit_btn2" type="submit">加入理财通</button>
-	            	</form>
-	             <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
-	          </div>
-	       </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-	</div>
-		
-		
+		<!-- bootstrap modal模态框  添加 消费/收入 类别-->
+		<div class="modal fade" id="myModal_addCateModal"><!-- myModal_addSpendCateModal -->
+			<div class="modal-dialog" id="modal_dialog_pad">
+	       		<div class="modal-content">
+		          <div class="modal-header">
+		            <button data-dismiss="modal" class="close" type="button"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+		            <h4 class="modal-title" align="center" id="addCategoryTitle"><!--jq动态 控制显示  添加消费类别 --></h4>
+		          </div>
+		          <div class="modal-body">
+		            <!-- <p>问题描述</p>
+		            <div id="modal_form_div"><!--jq 动态控制  action 属性 -->
+			            <form action="" method="post" id="addCateform">
+			            	<input type="text" name="name" class="form-control" placeholder="输入类别名" id="modal_addCate_name">
+		            </div>
+		          </div>
+		          <div class="modal-footer">   <!-- modal_addSpendCate_submitbtn -->
+		            		<button class="btn btn-primary" id="modal_addCate_submitbtn" type="submit">添加类别</button>
+		            	</form>
+		             <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
+		          </div>
+		       </div><!-- /.modal-content -->
+	      </div><!-- /.modal-dialog -->
+		</div>
+	
 	</div>
 </body>
 </html>

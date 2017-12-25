@@ -21,18 +21,18 @@ public class SpendController {
 	private SpendService spendService;
 	//增加消费 类别
 	/*@RequestMapping("addSpendCate")*/
-	@RequestMapping("test")//测试 
+	@RequestMapping(value="addSpendCate",method=RequestMethod.POST)//测试 
 	public String addSpendCate(SpendCategory spendCate,HttpServletRequest request) {
-		System.out.println("进入test controller  "+spendCate.getName());
 		int num = 0;
 		String msg = "添加消费类别 失败，3秒后跳转到首页 <meta http-equiv=\"refresh\" content=\"3;url=/financing/index.action\"></meta>";
 		num = spendService.addSpendCate(spendCate);
 		if(num!=0) {
-			List<SpendCategory> list = spendService.queryAllSpendCate();
-			request.setAttribute("spendCateList", list);
-			return "test";//先进行测试
+			msg = "添加消费类别 成功，3秒后跳转到首页 <meta http-equiv=\"refresh\" content=\"3;url=/financing/index.action\"></meta>";
+			//添加成功后 要更新存在session中的 消费类别信息
+			request.getSession().setAttribute("spendcate",spendService.queryAllSpendCate());
 		}
-		return "error";
+		request.setAttribute("msg", msg);
+		return "message";
 	}
 	@RequestMapping(value="addSpendRecord",method=RequestMethod.POST)
 	public String addSpendRecord(SpendRecord spendRecord,HttpServletRequest request) {
@@ -40,9 +40,9 @@ public class SpendController {
 		System.out.println(date.toString());
 		spendRecord.setDate(date);
 		int num = spendService.addSpendRecord(spendRecord);
-		String msg = "添加消费记录信息  失败，3秒后跳转到首页 <meta http-equiv=\\\"refresh\\\" content=\\\"3;url=/financing/index.action\\\"></meta>";
+		String msg = "添加消费记录信息  失败，3秒后跳转到首页 <meta http-equiv=\"refresh\" content=\"3;url=/financing/index.action\"></meta>";
 		if(num!=0) {
-			msg = "添加消费记录信息成功 ，3秒后跳转到首页 <meta http-equiv=\\\"refresh\\\" content=\\\"3;url=/financing/index.action\\\"></meta>";
+			msg = "添加消费记录信息成功 ，3秒后跳转到首页 <meta http-equiv=\"refresh\" content=\"3;url=/financing/index.action\"></meta>";
 		}
 		request.setAttribute("msg", msg);
 		return "message";

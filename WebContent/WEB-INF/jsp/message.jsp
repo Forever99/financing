@@ -5,11 +5,19 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>错误-理财通</title>
+<title>消息-理财通</title>
 </head>
 <body>
 <font style="color:red;">${msg }</font>
 <br>
-没跳转？<a href="${pageContext.request.contextPath }/financing/user/firstfont.action">点这里</a>
+没跳转？
+<c:choose>
+	<c:when test="${not empty sessionScope.user }">
+		<a href="${pageContext.request.contextPath }/index.action">点这里</a>
+	</c:when>
+	<c:otherwise>
+		<a href="${pageContext.request.contextPath }/user/firstfont.action">点这里</a>
+	</c:otherwise>
+</c:choose>
 </body>
 </html>
