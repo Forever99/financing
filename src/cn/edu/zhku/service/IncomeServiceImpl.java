@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import cn.edu.zhku.mapper.IncomeMapper;
 import cn.edu.zhku.pojo.IncomeCategory;
+import cn.edu.zhku.pojo.IncomeRecord;
 @Service
 public class IncomeServiceImpl implements IncomeService{
 	@Autowired
@@ -18,6 +19,10 @@ public class IncomeServiceImpl implements IncomeService{
 	@Override
 	public List<IncomeCategory> queryAllIncomeCate() {
 		return incomeMapper.queryAllIncomeCate();
+	}
+	@Override
+	public int addIncomeRecord(IncomeRecord incomeRecord) {
+		return incomeMapper.addIncomeRecord(incomeRecord);
 	}
 	
 }

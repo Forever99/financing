@@ -384,7 +384,7 @@ p {
 							<input type="hidden" name="user_id" value="${sessionScope.user.id }">
 							<div class="input-group">
 							  <span class="input-group-addon">￥</span>
-							  <input id="income_input_div" type="text" class="form-control" name="spendnum" placeholder="输入输入金额" aria-label="Amount (to the nearest dollar)">
+							  <input id="income_input_div" type="text" class="form-control" name="incomenum" placeholder="输入金额" aria-label="Amount (to the nearest dollar)">
 							  <span class="input-group-addon">.00</span>
 							</div>
 							

@@ -29,11 +29,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		values(#{name})
 	</insert>
 	
-	<!-- 插入消费记录信息 -->
-	<insert id="addSpendRecord" parameterType="SpendRecord" useGeneratedKeys="true"
+	<!-- 插入收入记录信息 -->
+	<insert id="addIncomeRecord" parameterType="IncomeRecord" useGeneratedKeys="true"
 		keyProperty="id">
-		insert into spend_record (spendnum,date,s_comment,user_id,s_category_id)
-		values(#{spendnum},#{date},#{comment},#{user_id},#{s_category_id})
+		insert into income_record (incomenum,i_comment,date,user_id,i_category_id)
+		values(#{incomenum},#{comment},#{date},#{user_id},#{i_category_id})
 	</insert>
 	<delete id="deleteSpendCate" parameterType="java.lang.Integer">
 		delete from spend_category where id=#{id}

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.edu.zhku.pojo.SpendCategory;
 import cn.edu.zhku.pojo.User;
+import cn.edu.zhku.service.IncomeService;
 import cn.edu.zhku.service.SpendService;
 import cn.edu.zhku.service.UserService;
 
@@ -26,6 +27,8 @@ public class UserController {
 	private UserService userService;
 	@Autowired
 	private SpendService spendService;
+	@Autowired
+	private IncomeService incomeService;
 
 	@RequestMapping("firstfont")
 	public String showpage() {
@@ -48,6 +51,7 @@ public class UserController {
 			List<SpendCategory> listSpendCate = spendService.queryAllSpendCate();
 			session.setAttribute("spendcate", listSpendCate);
 			session.setAttribute("user", user1);
+			session.setAttribute("incomecate", incomeService.queryAllIncomeCate());
 			return "index";
 		}
 		String msg = "µÇÂ¼Ê§°Ü£¬3ÃëºóÌø×ªµ½µÇÂ¼×¢²áÒ³Ãæ <meta http-equiv=\"refresh\" content=\"3;url=/financing/user/firstfont.action\"></meta>";

@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import cn.edu.zhku.pojo.IncomeCategory;
+import cn.edu.zhku.pojo.IncomeRecord;
 import cn.edu.zhku.pojo.SpendCategory;
 import cn.edu.zhku.pojo.SpendRecord;
 import cn.edu.zhku.pojo.User;
@@ -146,7 +147,14 @@ public class TestMybatis {
 		for(IncomeCategory incomeCate2:list) {
 			System.out.print(incomeCate2.getName()+" ");
 		}
-	
+		IncomeRecord i = new IncomeRecord();
+		Date date = new Date();
+		i.setIncomenum(90);
+		i.setComment("国考报名费");
+		i.setDate(date);
+		i.setUser_id(2);
+		i.setI_category_id(5);
+		incomeService.addIncomeRecord(i);
 	}
 	
 	
