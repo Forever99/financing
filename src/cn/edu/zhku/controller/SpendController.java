@@ -1,14 +1,15 @@
 package cn.edu.zhku.controller;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.edu.zhku.pojo.SpendCategory;
 import cn.edu.zhku.pojo.SpendRecord;
@@ -21,18 +22,16 @@ public class SpendController {
 	private SpendService spendService;
 	//增加消费 类别
 	/*@RequestMapping("addSpendCate")*/
-	@RequestMapping(value="addSpendCate",method=RequestMethod.POST)//测试 
-	public String addSpendCate(SpendCategory spendCate,HttpServletRequest request) {
+	@RequestMapping(value="addSpendCate",method=RequestMethod.POST)
+	@ResponseBody
+	public String addSpendCate(@RequestBody SpendCategory spendCate) {
 		int num = 0;
-		String msg = "添加消费类别 失败，3秒后跳转到首页 <meta http-equiv=\"refresh\" content=\"3;url=/financing/index.action\"></meta>";
-		num = spendService.addSpendCate(spendCate);
-		if(num!=0) {
-			msg = "添加消费类别 成功，3秒后跳转到首页 <meta http-equiv=\"refresh\" content=\"3;url=/financing/index.action\"></meta>";
-			//添加成功后 要更新存在session中的 消费类别信息
-			request.getSession().setAttribute("spendcate",spendService.queryAllSpendCate());
+		spendService.addSpendCate(spendCate);
+		num = spendCate.getId();  //原来 会自动 封装到 实体类中  返回的 int 类型 是 影响的行数 
+		if(num!=0) {//返回 json数据给 前端
+			return "{\"name\":\""+spendCate.getName()+"\",\"value\":\""+num+"\"}";
 		}
-		request.setAttribute("msg", msg);
-		return "message";
+		return "{\"name\":\"none\",\"value\":\""+num+"\"}";
 	}
 	@RequestMapping(value="addSpendRecord",method=RequestMethod.POST)
 	public String addSpendRecord(SpendRecord spendRecord,HttpServletRequest request) {

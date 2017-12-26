@@ -3,8 +3,6 @@ package cn.edu.zhku.mapper;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
 import cn.edu.zhku.pojo.SpendCategory;
 import cn.edu.zhku.pojo.SpendRecord;
 

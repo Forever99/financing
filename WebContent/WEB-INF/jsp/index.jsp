@@ -112,10 +112,18 @@
 				return false;
 			}else{
 				if(modal_spend_income == "spendCate"){
-					$("#addCateform").attr("action","${pageContext.request.contextPath }/spend/addSpendCate.action");
+					/* $("#addCateform").attr("action","${pageContext.request.contextPath }/spend/addSpendCate.action"); */
+					 /* 调用 ajax 函数 提交 */
+					 var cateurl = "${pageContext.request.contextPath }/spend/addSpendCate.action";
+					 /* 传递的数据  Cateval 以及 往哪个select表标签 添加 option节点 */
+					 var spendNode = "select_spend_cate";
+					 /* 调用ajax函数 */
+					 ajaxfunctionCate(cateurl,Cateval,spendNode);
 				}
 				if(modal_spend_income == "incomeCate"){
-					$("#addCateform").attr("action","${pageContext.request.contextPath }/income/addIncomeCate.action");
+					 var cateurl = "${pageContext.request.contextPath }/income/addIncomeCate.action";
+					 var incomeNode = "select_income_cate";
+					 ajaxfunctionCate(cateurl,Cateval,incomeNode);
 				}	
 			}
 		});
@@ -145,7 +153,27 @@
 			}
 		});
 		
+		
 	});
+	
+	function ajaxfunctionCate(cateurl,Cateval,Node){
+		$.ajax({
+			url:cateurl,/* 发送给服务器的url */
+			type:"post",
+			/* data:{"username":$(this).val()}, *//* 发送给服务器的数据 json数据 */
+			data:JSON.stringify({"name":Cateval}),
+			dataType:"json", /* 预期的服务器响应的数据 */
+			contentType:"application/json;charset=utf-8",/* 发送数据给服务器时所用的内容类型	*/
+			success:function(data){ /* 当请求成功时运行的函数 */
+				if(data!=null && data.name!=null && data.name!="none"){
+					$("#myModal_addCateModal").modal('hide');
+					$("#"+Node).append("<option value="+data.value+">"+data.name+"</option>");
+				}
+			},
+			error:function(data){
+			}
+		});
+	}
 </script>
 <style>
 #container {
@@ -454,8 +482,7 @@ p {
       </div><!-- /.modal-dialog -->
 	</div>
 		
-		
-		<!-- bootstrap modal模态框  添加 消费/收入 类别-->
+		<!-- bootstrap modal模态框  添加 消费/收入 类别  去掉 form 表单  用jQuery ajax form 提交后 会刷新页面-->
 		<div class="modal fade" id="myModal_addCateModal"><!-- myModal_addSpendCateModal -->
 			<div class="modal-dialog" id="modal_dialog_pad">
 	       		<div class="modal-content">
@@ -464,21 +491,21 @@ p {
 		            <h4 class="modal-title" align="center" id="addCategoryTitle"><!--jq动态 控制显示  添加消费类别 --></h4>
 		          </div>
 		          <div class="modal-body">
-		            <!-- <p>问题描述</p>
+		            <!-- <p>问题描述</p>-->
 		            <div id="modal_form_div"><!--jq 动态控制  action 属性 -->
-			            <form action="" method="post" id="addCateform">
+			           <!--  <form action="" method="post" id="addCateform"> -->
 			            	<input type="text" name="name" class="form-control" placeholder="输入类别名" id="modal_addCate_name">
 		            </div>
 		          </div>
 		          <div class="modal-footer">   <!-- modal_addSpendCate_submitbtn -->
 		            		<button class="btn btn-primary" id="modal_addCate_submitbtn" type="submit">添加类别</button>
-		            	</form>
+		            	<!-- </form> -->
 		             <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
 		          </div>
 		       </div><!-- /.modal-content -->
 	      </div><!-- /.modal-dialog -->
 		</div>
-	
+		
 	</div>
 </body>
 </html>

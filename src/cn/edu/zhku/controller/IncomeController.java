@@ -6,8 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.edu.zhku.pojo.IncomeCategory;
 import cn.edu.zhku.pojo.IncomeRecord;
@@ -19,19 +21,19 @@ public class IncomeController {
 	@Autowired
 	private IncomeService incomeService;
 	
+	//jq + ajax 操作 
 	@RequestMapping(value="addIncomeCate",method=RequestMethod.POST)
-	public String addIncomeCate(IncomeCategory incomeCate,HttpServletRequest request) {
+	@ResponseBody
+	public String addIncomeCate(@RequestBody IncomeCategory incomeCate) {
 		int num = 0;
-		String msg = "添加收入类别 失败，3秒后跳转到首页 <meta http-equiv=\"refresh\" content=\"3;url=/financing/index.action\"></meta>";
-		num = incomeService.addIncomeCate(incomeCate);
+		incomeService.addIncomeCate(incomeCate);
+		num = incomeCate.getId();
 		if(num!=0) {
-			msg = "添加收入类别 成功，3秒后跳转到首页 <meta http-equiv=\"refresh\" content=\"3;url=/financing/index.action\"></meta>";
-			//添加成功后 要更新存在session中的 消费类别信息
-			request.getSession().setAttribute("incomecate",incomeService.queryAllIncomeCate());
+			return "{\"name\":\""+incomeCate.getName()+"\",\"value\":\""+num+"\"}";
 		}
-		request.setAttribute("msg", msg);
-		return "message";
+		return "{\"name\":\"none\",\"value\":\""+num+"\"}";
 	}
+	
 	@RequestMapping(value="addIncomeRecord",method=RequestMethod.POST)
 	public String addIncomeRecord(IncomeRecord incomeRecord,HttpServletRequest request) {
 		int num = 0;
