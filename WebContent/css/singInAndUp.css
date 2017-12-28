@@ -1,0 +1,95 @@
+@charset "UTF-8";
+#index-main {
+	height: auto;
+	width: auto;
+}
+
+#index-main-body {
+	margin: auto;
+	width: 350px;
+	height: 600px;
+	/* background-color: pink; */
+}
+
+#main-body-top {
+	width: 350px;
+	height: 170px;
+}
+
+#changebtn {
+	width: 160px;
+	height: 32px;
+	/* background-color: gray; */
+	margin: auto;
+}
+
+#spanl {
+	float: left;
+}
+
+#spanl button font {
+	color: black;
+}
+
+#spanr {
+	float: right;
+}
+
+#spanr button font {
+	color: black;
+}
+
+#formdiv {
+	margin: auto;
+	margin-top: 5px;
+	width: 340px;
+	height: 300px;
+	/* background-color: green; */
+	width: 340px;
+}
+
+.form-control {
+	height: 45px;
+	width: 330px;
+	margin: auto;
+	margin-top: 4px;
+}
+
+#insubmit {
+	margin: auto;
+	margin-top: 4px;
+	margin-left: 5px;
+	width: 330px;
+	height: 45px;
+	width: 330px;
+}
+
+#spanpad {
+	float: right;
+	margin-right: 5px;
+}
+.msgdiv{
+	float:right;
+	background-color: blue;
+}
+
+#myModal{
+	width:350px;
+	margin:auto;
+}
+.modal-dialog{
+	width:300px;
+	margin:auto;
+}
+#modal_form_div{
+	width:250px;
+	margin:auto;
+}
+
+#modal_form_div input{
+	width:250px;
+	margin-top:5px;
+}
+#modal_dialog_pad{
+	margin-top:80px;
+}

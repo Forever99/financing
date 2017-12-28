@@ -3,7 +3,9 @@ package cn.edu.zhku.test;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -14,12 +16,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import cn.edu.zhku.pojo.IncomeCategory;
 import cn.edu.zhku.pojo.IncomeRecord;
-import cn.edu.zhku.pojo.SpendCategory;
+import cn.edu.zhku.pojo.RecordInfo;
 import cn.edu.zhku.pojo.SpendRecord;
 import cn.edu.zhku.pojo.User;
 import cn.edu.zhku.service.IncomeService;
+import cn.edu.zhku.service.RecordInfoService;
 import cn.edu.zhku.service.SpendService;
 import cn.edu.zhku.service.UserService;
+import cn.edu.zhku.util.SingleDateFormat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations= {"classpath:spring/applicationContext-*.xml"})
 public class TestMybatis {
@@ -29,6 +33,10 @@ public class TestMybatis {
 	private SpendService spendService;
 	@Resource
 	private IncomeService incomeService;
+	
+	@Resource
+	private RecordInfoService recordInfoService;
+	
 	@Test
 	public void testuser1() {
 		@SuppressWarnings("unused")
@@ -74,8 +82,8 @@ public class TestMybatis {
 	}
 	@Test//测试  消费类别 表 
 	public void testInsertS_cate() {
-		/*插入 成功
-		 * SpendCategory s_cate = new SpendCategory();
+		//插入 成功
+		/*SpendCategory s_cate = new SpendCategory();
 		s_cate.setName("生活用品");
 		spendService.addSpendCate(s_cate);*/
 		//测试删除  删除 通过测试
@@ -84,10 +92,10 @@ public class TestMybatis {
 		System.out.println(num);*/
 		
 		//查询所有 测试  通过测试！ 
-		List<SpendCategory> list = spendService.queryAllSpendCate();
+		/*List<SpendCategory> list = spendService.queryAllSpendCate();
 		for(SpendCategory cate:list) {
 			System.out.print(cate.getName()+" ");
-		}
+		}*/
 	}
 	@Test//测试 插入 消费记录 表 
 	public void testInsertS_record() {
@@ -126,13 +134,21 @@ public class TestMybatis {
 		/*HashMap<String,String> map = new HashMap<String,String>();*/
 		/*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String date1 = sdf.format(new Date());*/
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
-		System.out.println(date);
-		/*map.put("date", date);*/
-		List<SpendRecord> list = spendService.queryApendRecordDate2(date);
-		for(SpendRecord spendRecord:list) {
-			System.out.print(spendRecord.getComment()+" ");
+		String strdate = sdf.format(date);
+		try {
+			Date date2 = sdf.parse(strdate);
+			System.out.println(date);
+			List<SpendRecord> list = spendService.queryApendRecordDate2(date2);
+			for(SpendRecord spendRecord:list) {
+				System.out.print(spendRecord.getComment()+" ");
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
 	
 	}
 	
@@ -158,4 +174,42 @@ public class TestMybatis {
 	}
 	
 	
+	//测试 
+	@Test
+	public void testcatename() {
+		int id = 5;
+		String name = incomeService.queryIncomeCategoryName(id).getName();
+		System.out.println(name);
+	}
+	
+	//测试 收入类别
+	@Test
+	public void testrecordInfo() {
+		/*RecordInfo info = new RecordInfo();
+		info.setNumber(-250);
+		info.setDate(new Date());
+		info.setComment("亏了");
+		info.setCate_name("支出");
+		recordInfoService.addRecordInfo(info);
+		System.out.println(info.getId());*/
+		/*System.out.println(recordInfoService.queryAllRecordInfo().toString());*/
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		/*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		String strdate = sdf.format(date);*/
+		Date date = new Date();
+		String strdate = SingleDateFormat.getDateToString(date);
+		//不用 再转回 Date类型 也可以 。。。
+		
+		map.put("date", strdate);
+		map.put("offset", 0);
+		map.put("pagesize", 5);
+		
+		List<RecordInfo> list = recordInfoService.queryRecordInfoByDatePage(map);
+		for(RecordInfo info:list) {
+			System.out.println((SingleDateFormat.getDateToString(info.getDate())));
+		}
+		
+	}
 }

@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="queryAllSpendRecord" resultType="SpendRecord">
-		select id,spendnum,date,s_comment,user_id,s_category_id from spend_record
+		select id,spendnum,date,s_comment as comment,user_id,s_category_id from spend_record
 	</select>
 	
 	<!-- 根据 相同 日期 查询 数据 -->
@@ -55,15 +55,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from spend_record
 		where id=#{id}
 	</select>
-	<!-- <update id="updateUserName" parameterType="User">
-		update user set username=#{username} where id=#{id}
-	</update>
-	<update id="updateUserPassword" parameterType="User">
-		update user set password=#{password} where id=#{id}
-	</update> -->
 	
-	<!-- 用来测试的
-	<update id="updateTestreturn" parameterType="java.lang.String">
-		update user set password=#{password}
-	</update> -->
+	<select id="querySpendCateName" parameterType="int" resultType="SpendCategory">
+		select id,name from spend_category
+		where id=#{id}
+	</select>
+	
+	<select id="querySpendRecordByDateUserId" parameterType="java.util.Map" resultType="SpendRecord">
+		select spendnum,date 
+		from spend_record 
+		where user_id=#{id} 
+		<if test="date!=null">
+			and date=#{date}
+		</if>
+	</select>
+	
 </mapper>

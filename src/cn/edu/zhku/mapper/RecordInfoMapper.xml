@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.zhku.mapper.RecordInfoMapper">
+	<!-- 查询 所有账单信息 -->
+	<select id="queryAllRecordInfo" resultType="RecordInfo">
+		select id,number,date,info_comment as comment,cate_name 
+		from recordinfo
+	</select>
+	
+	<!-- 添加用户 useGeneratedKeys开启后 jdbc会 获取自动增长的主键 赋值给keyProperty属性 -->
+	<insert id="addRecordInfo" parameterType="RecordInfo" useGeneratedKeys="true"
+		keyProperty="id">
+		insert into recordinfo
+		(number,date,info_comment,cate_name,user_id)
+		values(#{number},#{date},#{comment},#{cate_name},#{user_id})
+	</insert>
+	
+	<!-- 根据 相同 日期  和 分页 查询 数据 -->
+	<select id="queryRecordInfoByDate" parameterType="java.util.Map" resultType="RecordInfo">
+		select id,number,date,info_comment as comment,cate_name
+		from recordinfo 
+		where
+		date=#{date} limit #{offset},#{pagesize}
+	</select>
+	
+</mapper>

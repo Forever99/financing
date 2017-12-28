@@ -1,0 +1,114 @@
+@charset "UTF-8";
+#container {
+	maring: auto;
+	width: auto;
+	background-color: #f4f4f4;
+}
+
+#nav_main_div {
+	width: 1000px;
+	height: 550px;
+	margin: auto;
+	margin-top: 5px;
+	background-color: #ffffff;
+}
+
+#headNochange_div {
+	width: auto;
+	height: 60px;
+	background: #ffffff;
+}
+
+#head_in {
+	width: 1000px;
+	height: 60px;
+	margin: auto;
+}
+
+#head_in_left {
+	width: 300px;
+	height: 60px;
+	margin: auto;
+	float: left;
+}
+
+#head_in_mid {
+	width: 300px;
+	height: 60px;
+	margin-left: 50px;
+	float: left;
+}
+
+#head_in_right {
+	width: 300px;
+	height: 60px;
+	margin: auto;
+	float: right;
+}
+
+#head_in_right_in {
+	width: 300px;
+	height: 35px;
+	margin-top: 15px;
+}
+
+#head_in_right_in_other {
+	width: 160px;
+	height: 35px;
+	float: right;
+}
+
+#serach_div {
+	margin-top: 17px;
+}
+
+#myModal_singInUp {
+	width: 350px;
+	margin: auto;
+}
+/* #myModal_singup{
+	width:350px;
+	margin:auto;
+} */
+#myModal_addCateModal {
+	width: 350px;
+	margin: auto;
+}
+
+.modal-dialog {
+	width: 300px;
+	margin: auto;
+}
+
+#modal_form_div {
+	width: 250px;
+	margin: auto;
+}
+
+#modal_form_div input {
+	width: 250px;
+	margin-top: 5px;
+}
+
+#modal_dialog_pad {
+	margin-top: 80px;
+}
+
+#singin_head_in_right_in_other {
+	width: 200px;
+	height: 35px;
+	float: right;
+}
+
+#singin_nav_head_in_right_in_other {
+	float: right;
+}
+
+p {
+	margin-left: 10px;
+	margin-top: 8px;
+}
+
+.input-group {
+	margin: 10px;
+}

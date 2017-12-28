@@ -106,3 +106,14 @@
   user_id int not null,
   foreign key (user_id) references user(id)
   )engine=InnoDb default charset=utf8;```
+
+  创建9张表 记录 所以账单明细信息
+  create table recordInfo(
+  id int not null primary key auto_increment,
+  number int not null comment '金额数',
+  date Date not null,
+  info_comment varchar(255) comment '备注',
+  cate_name varchar(200) comment '类别名',
+  user_id int not null,
+  foreign key (user_id) references user(id)
+  )engine=InnoDb default charset=utf8;

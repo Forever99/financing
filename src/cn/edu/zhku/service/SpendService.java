@@ -16,4 +16,5 @@ public interface SpendService {
 	public List<SpendRecord> queryApendRecordDate(Date date,int start,int end);
 	public List<SpendRecord> queryApendRecordDate2(Date date);
 	public SpendRecord querySpendRecord(int id);
+	List<SpendRecord> querySpendRecordByDateUserId(Map map);
 }
