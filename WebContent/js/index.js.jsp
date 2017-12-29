@@ -163,6 +163,9 @@
 								ajaxfunctionGetData(urlPath,dataArray);
 								$("#personRecord_body_detail_alltable").hide();//点击 查询 显示 具体 那天的信息 并隐藏 全部信息的div 在 上面 有实现 
 								$("#personRecord_body_detail_datetable").show();
+								
+								//调用 ajax  函数 显示 该用户 当天 收入情况
+								ajaxCalcutePageTotals("date_table",inputval);
 							}else{
 								alert("请点击选择日期输入框 选择日期 ！");
 							}
@@ -173,8 +176,13 @@
 						$("#personRecord_body_detail_datetable").hide();
 						
 						$("#showDetailRecordbtn").click(function(){
+							 //显示 分页 按钮
+							//$("#pageNavId").show();
 							$("#personRecord_body_detail_datetable").hide();
 							$("#personRecord_body_detail_alltable").show();
+							
+							//调用 ajax 查后台 分页数据
+							ajaxCalcutePageTotals();
 						});
 						$("#a_id_record").click(function(){
 							$("#personRecord_body_detail_alltable").show();
@@ -202,8 +210,156 @@
 						  return fmt;     
 						};  
 						
+						//刚进来 不显示 详细信息 表格的分页 按钮  点击 显示 所有 信息按钮后 才给显示
+						//$("#pageNavId").hide();
+						
+						var totalPages = 0;//总页数 
+						var currentPage = $("#personRecordPage").val();//当前页
+						
+						//查询 后台 获取总页数   在登录的状态下
+						var singinOrNot = '${sessionScope.user }';
+						if(''!=singinOrNot){
+							ajaxCalcutePageTotals("personRecord_table","");
+						}
+						
+						$("#prePagebtnId_all").click(function(){//当 前一页按钮 点击后 调用ajax 查询 后台数据
+							var isGoOn = isPageBorderPre("personRecordPage","prePagebtnId_all");
+							//console.log("边界 判断"+isGoOn);                  
+							if(isGoOn){//不是 边界 时调用函数 先将 上一页按钮 可用
+								$("#prePagebtnId_all").removeClass("disabled");
+								var currentPage = $("#personRecordPage").val();
+								currentPage--;//因为 要查找上一页数据
+								ajaxPagefunction(currentPage,"personRecordPage","personRecord_table");
+							}
+							
+						});
+						
+						$("#nextPagebtnId_all").click(function(){
+							var isGoOn = isPageBorderNext("personRecordPage","nextPagebtnId_all");
+							//console.log("边界 判断"+isGoOn);
+							if(isGoOn){//不是 边界 时调用函数 
+								$("#nextPagebtnId_all").removeClass("disabled");
+								$("#prePagebtnId_all").removeClass("disabled");
+								
+								var currentPage = $("#personRecordPage").val();
+								currentPage++;//因为 要查找上一页数据
+								ajaxPagefunction(currentPage,"personRecordPage","personRecord_table");
+							}
+						});
+						
+						$("#prePagebtnId_date").click(function(){
+							var isGoOn = isPageBorderPre("recordResultPage","prePagebtnId_date");
+							//console.log("边界 判断"+isGoOn);                  
+							if(isGoOn){//不是 边界 时调用函数 先将 上一页按钮 可用
+								//$("#prePagebtnId_all").removeClass("disabled");
+								var currentPage = $("#recordResultPage").val();
+								currentPage--;//因为 要查找上一页数据
+								ajaxPagefunction(currentPage,"recordResultPage","date_table");
+							}
+						});
+						$("#nextPagebtnId_date").click(function(){
+							var isGoOn = isPageBorderPre("recordResultPage","nextPagebtnId_date");
+							//console.log("边界 判断"+isGoOn);                  
+							if(isGoOn){//不是 边界 时调用函数 先将 上一页按钮 可用
+								//$("#prePagebtnId_all").removeClass("disabled");
+								var currentPage = $("#recordResultPage").val();
+								currentPage--;//因为 要查找上一页数据
+								ajaxPagefunction(currentPage,"recordResultPage","date_table");
+							}
+						});
+						
+						
 					});
 
+//定义一个全局变量  记住 总页数
+var globalTotalPages = 0;
+
+//先要 从后台 查一共有几条记录数 用于后面的判断 有点 蛋疼 。。。。。这个是可以优化的 
+function ajaxCalcutePageTotals(tableId,date){
+	$.ajax({
+			url:"${pageContext.request.contextPath }/recordInfo/queryAllrecord.action",
+			type:"post",
+			data:"userId=${sessionScope.user.id}&currentPage=1&date="+date,//第一次 默认 第一页
+			dataType:"json",//服务器返回数据 为 json数据
+			success:function(data){
+				globalTotalPages = data.totalPages;
+				console.log("查询后台 知总页数为： "+globalTotalPages+" 当前页"+$("#personRecordPage").val()); //获取成功
+				if(0==globalTotalPages){//如果后台 返回的数据 是空的 即是 数据库中 没有数据 那么 提示 没有数据 并将 翻页 按钮隐藏
+					$("#"+tableId+" tbody").html("<h3><font style='color: red;' align='center'>没有数据</font></h3>");
+					$("#pageNavId").hide();
+				}else{
+					//将 从后台 查询到的数据 返回给 前端展示出来  但是 展现出来前 需要 将 日期 转换为 yyyy-MM-dd格式
+					var dateArrayTem = [];//定义一个 接收 临时 日期数组
+					for(var i=0;i < data.pageResult.length;i++){
+						dateArrayTem.push(new Date(data.pageResult[i].date).Format("yyyy-MM-dd"));
+					} 
+					$("#"+tableId+" tbody").html("");
+					for(var i=0;i < data.pageResult.length;i++){
+						$("#"+tableId+" tbody").append("<tr><td>"+data.pageResult[i].number+"</td><td>"+data.pageResult[i].cate_name+"</td><td>"+data.pageResult[i].comment+"</td><td>"+dateArrayTem[i]+"</td></tr>");
+					}
+					//第一页 所以 上一页 按钮不可以点击
+					//如果 当前页面是第一页 那么 上一页 按钮 那就消失吧
+					//$("#prePagebtnId_all").addClass("disabled");
+				}
+			},
+			error:function(){
+			}
+		});
+}
+
+//判断是否是上边界  页面 边界
+function isPageBorderPre(currentPageId,btnId){
+	var currentpage = $("#"+currentPageId).val();
+		//console.log("当前页面 wowowo "+currentpage);
+		if(currentpage==1){
+			//如果 当前页面是第一页 那么 上一页 按钮禁止点击 并 return;
+			//$("#"+btnId).addClass("disabled");
+			alert("当前是第一页 ，没有上一页数据");
+			return false;
+		}
+		return true;
+}
+//判断 是否是 下边界 
+function isPageBorderNext(currentPageId,btnId){
+	var currentpage = $("#"+currentPageId).val();
+		//console.log("当前页面 wowowo "+currentpage);		
+		if(currentpage==globalTotalPages){
+			//如果 当前页面是第最后一页 那么 下一页 按钮禁止点击 ;
+			//$("#"+btnId).addClass("disabled");
+			alert("哈哈哈哈,数据显示完了，没有下一页了");
+			return false;
+		}
+		return true;
+}
+
+	//分页 jq+ajax 实现 函数  主要  参数 currentPage 告诉 后台 我要找 第几页的数据 （调用 该函数 前 先 调用 边界判断 函数 只有 在 不是 边界的情况下 才调用 该函数）
+	function ajaxPagefunction(currentPage,currentPageId,tableId){
+		//用户登录页面 执行 ajax函数 去查找 该用户 对应的recordInfo表中 有多少条数据 可以显示 几页 规定 每页 5条数据
+		$.ajax({
+			url:"${pageContext.request.contextPath }/recordInfo/queryAllrecord.action",
+			type:"post",
+			data:"userId=${sessionScope.user.id}&currentPage="+currentPage,
+			dataType:"json",//服务器返回数据 为 json数据
+			success:function(data){
+				//操作成功后 更新  当前页标签中
+				$("#"+currentPageId).val(currentPage);
+				//返回的json 数组 里边有 查询到的 第一页 数据 以及 该用户 的所有记录可以分为几页 
+				//console.log(data);
+				
+				//将 从后台 查询到的数据 返回给 前端展示出来  但是 展现出来前 需要 将 日期 转换为 yyyy-MM-dd格式
+				var dateArrayTem = [];//定义一个 接收 临时 日期数组
+				for(var i=0;i < data.pageResult.length;i++){
+					dateArrayTem.push(new Date(data.pageResult[i].date).Format("yyyy-MM-dd"));
+				} 
+				//显示 新页面数据前 先要 将当前页面数据 清空 然后拼接 新数据
+				$("#"+tableId+" tbody").html("");
+				for(var i=0;i < data.pageResult.length;i++){
+					$("#"+tableId+" tbody").append("<tr><td>"+data.pageResult[i].number+"</td><td>"+data.pageResult[i].cate_name+"</td><td>"+data.pageResult[i].comment+"</td><td>"+dateArrayTem[i]+"</td></tr>");
+				}
+			}
+		});
+	}
+	
 	function ajaxfunctionCate(cateurl, Cateval, Node) {
 		$.ajax({
 			url : cateurl,/* 发送给服务器的url */
@@ -226,6 +382,8 @@
 			}
 		});
 	}
+	
+	
 	//datastr 是一个 数组 记录 了 后台需需要的数据
 	function ajaxfunctionGetData(urlPath,datastr){
 		$.ajax({

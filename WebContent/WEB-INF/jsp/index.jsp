@@ -178,8 +178,33 @@
 							<div id="personRecord_body"
 								style="height: 420px; margin-top: 5px;">
 								<span style="margin-left:10px;"><button class="btn btn-default" id="showDetailRecordbtn">显示全部记录</button></span>
-								<div id="personRecord_body_detail_alltable" style="background-color:blue;height:380px;width:950px;margin:auto;">
-									<p><font style="color: #009fe8; font-size: 16px;">收支明细</font></p>
+								<div id="personRecord_body_detail_alltable" style="height:380px;width:950px;margin:auto;">
+									<p><font style="color: #009fe8; font-size: 16px;">收支明细如下:</font></p>
+									<div style="width:850px;height:340px;margin:auto;">
+										<div style="margin:auto;width:auto;height:260px;">
+											<table class="table table-hover" id="personRecord_table">
+												<thead style="background-color:#aed9fb;">
+													<tr>
+														<th>金额(￥)</th>
+														<th>类型</th>
+														<th>备注</th>
+														<th>时间</th>
+													</tr>
+												</thead>
+												<tbody> <!-- jq ajax拿到数据动态显示 --> </tbody>
+											</table>
+										</div>
+										<div>
+											<nav id="pageNavId">
+											  <ul class="pager">
+											    <li id="prePagebtnId_all"><a href="#">上一页</a></li>
+											    <input type="hidden" value="1" id="personRecordPage"><!--默认当前是第1页  -->
+											    <li id="nextPagebtnId_all"><a href="#">下一页</a></li> 
+											  </ul>
+											</nav>
+										</div>
+										
+									</div>
 								</div>
 								
 								<div id="personRecord_body_detail_datetable" style="height:380px;width:950px;margin:auto;">
@@ -191,24 +216,30 @@
 									</p>
 									<div id="personRecord_body_searchInfoId">
 										<div id="personRecord_body_searchInfoId_inBody" style="width:850px;height:340px;margin:auto;">
-											<table class="table table-hover">
-										<thead>
-											<tr>
-												<th>金额(￥)</th>
-												<th>类型</th>
-												<th>备注</th>
-												<th>时间</th>
-											</tr>
-										</thead>
-										<tbody>
-											<!-- <tr>
-												<td>-<b id="table1_spendId"></b></td>
-												<td>+<b id="table1_incomeId"></b></td>
-												<td> <b id="table1_inOrOutId"></b></td>
-												<td> <b id="table1_inOrOutId"></b></td>
-											</tr> -->
-										</tbody>
-									</table>
+											<div style="margin:auto;width:auto;height:260px;">
+											<table class="table table-hover" id="date_table">
+												<thead style="background-color:#ffecb9;">
+													<tr>
+														<th>金额(￥)</th>
+														<th>类型</th>
+														<th>备注</th>
+														<th>时间</th>
+													</tr>
+												</thead>
+												<tbody>
+													<!-- jq ajax拿到数据动态显示 -->
+												</tbody>
+											</table>
+										</div>
+										<div>
+											<nav>
+											  <ul class="pager">
+											    <li id="prePagebtnId_date"><a href="#">上一页</a></li>
+											    <input type="hidden" value="1" id="recordResultPage"><!--默认当前是第1页  -->
+											    <li id="nextPagebtnId_date"><a href="#">下一页 </a></li>
+											  </ul>
+											</nav>
+										</div>
 										</div>
 									</div>
 								</div>

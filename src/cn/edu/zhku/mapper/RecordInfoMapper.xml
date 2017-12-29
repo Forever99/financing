@@ -22,7 +22,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select id,number,date,info_comment as comment,cate_name
 		from recordinfo 
 		where
-		date=#{date} limit #{offset},#{pagesize}
+		user_id=#{user_id}
+		<if test="date!=null">
+			and date=#{date}
+		</if>
+		<if test="pagesize!=null">
+			limit #{start},#{pagesize}
+		</if>
 	</select>
 	
 </mapper>
