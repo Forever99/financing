@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import cn.edu.zhku.pojo.SelectSumPojo;
 import cn.edu.zhku.pojo.SpendCategory;
 import cn.edu.zhku.pojo.SpendRecord;
 
@@ -18,4 +19,6 @@ public interface SpendMapper {
 	public List<SpendRecord> querySpendRecordDate2(Date date);
 	public SpendRecord querySpendRecord(int id);
 	public List<SpendRecord> querySpendRecordByDateUserId(Map map);
+	public List<SelectSumPojo> queryMonthNumdata(Map map);
+	public List<SelectSumPojo> queryMonthCateData(Map map);
 }

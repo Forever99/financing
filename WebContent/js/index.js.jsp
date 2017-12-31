@@ -180,9 +180,9 @@
 							//$("#pageNavId").show();
 							$("#personRecord_body_detail_datetable").hide();
 							$("#personRecord_body_detail_alltable").show();
-							
+							$("#pageNavId").show();
 							//调用 ajax 查后台 分页数据
-							ajaxCalcutePageTotals();
+							ajaxCalcutePageTotals("personRecord_table","");
 						});
 						$("#a_id_record").click(function(){
 							$("#personRecord_body_detail_alltable").show();
@@ -229,7 +229,7 @@
 								$("#prePagebtnId_all").removeClass("disabled");
 								var currentPage = $("#personRecordPage").val();
 								currentPage--;//因为 要查找上一页数据
-								ajaxPagefunction(currentPage,"personRecordPage","personRecord_table");
+								ajaxPagefunction(currentPage,"personRecordPage","personRecord_table","");
 							}
 							
 						});
@@ -243,7 +243,7 @@
 								
 								var currentPage = $("#personRecordPage").val();
 								currentPage++;//因为 要查找上一页数据
-								ajaxPagefunction(currentPage,"personRecordPage","personRecord_table");
+								ajaxPagefunction(currentPage,"personRecordPage","personRecord_table","");
 							}
 						});
 						
@@ -254,22 +254,217 @@
 								//$("#prePagebtnId_all").removeClass("disabled");
 								var currentPage = $("#recordResultPage").val();
 								currentPage--;//因为 要查找上一页数据
-								ajaxPagefunction(currentPage,"recordResultPage","date_table");
+								ajaxPagefunction(currentPage,"recordResultPage","date_table",$("#datatimeo").val());
 							}
 						});
 						$("#nextPagebtnId_date").click(function(){
-							var isGoOn = isPageBorderPre("recordResultPage","nextPagebtnId_date");
+							var isGoOn = isPageBorderNext("recordResultPage","nextPagebtnId_date");
 							//console.log("边界 判断"+isGoOn);                  
-							if(isGoOn){//不是 边界 时调用函数 先将 上一页按钮 可用
+							if(isGoOn){//不是 边界 时调用函数 先将 下一页按钮 可用
 								//$("#prePagebtnId_all").removeClass("disabled");
 								var currentPage = $("#recordResultPage").val();
-								currentPage--;//因为 要查找上一页数据
-								ajaxPagefunction(currentPage,"recordResultPage","date_table");
+								currentPage++;//因为 要查找下一页数据
+								ajaxPagefunction(currentPage,"recordResultPage","date_table",$("#datatimeo").val());
 							}
 						});
 						
+						$("#yearaddId").click(function(){
+							var year = $("#yearNumId").text();
+							year++;
+							$("#yearNumId").text(year);
+							$("#titleYearId").text(year);
+							
+							//调用 绘图 插件
+							ajaxGetYearDataGraph(year);
+						});
+						$("#yearsubId").click(function(){
+							var year = $("#yearNumId").text();
+							year--;
+							$("#yearNumId").text(year);
+							$("#titleYearId").text(year);
+							//调用 绘图 插件
+							ajaxGetYearDataGraph(year);
+						});
+						
+						$("#yearsubId2").click(function(){
+							var year = $("#yearNumId2").text();
+							year--;
+							$("#yearNumId2").text(year);
+							$("#titleYearId2").text(year);
+						});
+						//点击 年份 增加 年份数 增加
+						$("#yearaddId2").click(function(){
+							var year = $("#yearNumId2").text();
+							year++;
+							$("#yearNumId2").text(year);
+							$("#titleYearId2").text(year);
+						});
+						
+						$("#monthsubId2").click(function(){
+							var month = $("#monthNumId2").text();
+							if(month == 1){//当 月份 为 1 时  再点击 减按钮 那么 变为 上一年 的12月份 
+								$("#monthNumId2").text("12");
+								$("#titleMonthId").text("12");
+								var year = $("#yearNumId2").text();
+								year--;
+								$("#yearNumId2").text(year);
+								$("#titleYearId2").text(year);
+							}else{
+								month--;
+								$("#monthNumId2").text(month);
+								$("#titleMonthId").text(month);
+							}
+						});
+						
+						$("#monthaddId2").click(function(){
+							var month = $("#monthNumId2").text();
+							if(month == 12){//当 月份 为 12 时  再点击 加按钮 那么 变为 下一年 的1月份 
+								$("#monthNumId2").text("1");
+								$("#titleMonthId").text("1");
+								var year = $("#yearNumId2").text();
+								year++;
+								$("#yearNumId2").text(year);
+								$("#titleYearId2").text(year);
+							}else{
+								month++;
+								$("#monthNumId2").text(month);
+								$("#titleMonthId").text(month);
+							}
+						});
+						
+						$("#yearsubId3").click(function(){
+							var year = $("#yearNumId3").text();
+							year--;
+							$("#yearNumId3").text(year);
+							$("#titleYearId3").text(year);
+							//调用 ajax 函数
+							ajaxGetMonthDataGrahp(year,"");
+						});
+						$("#yearaddId3").click(function(){
+							var year = $("#yearNumId3").text();
+							year++;
+							$("#yearNumId3").text(year);
+							$("#titleYearId3").text(year);
+							//调用 ajax 函数
+							ajaxGetMonthDataGrahp(year,"");
+						});
+						
+						//点击 查看 按钮 显示 饼图
+						$("#yearMonthBtnId").click(function(){
+							ajaxGetMonthDataGrahp($("#yearNumId2").text(),$("#monthNumId2").text());
+						});
+						
+						//点击显示 收支报表后  调用 ajax 给 heighchart 提供年度 收支情况 数据
+						$("#showSpendIncomeGraphId").click(function(){
+							ajaxGetYearDataGraph($("#yearNumId").text());
+						});
+						 
+						//点击月份消费比 后 调用 ajax 给 heighchart 提供年度具体某月的 消费比重 情况 数据
+						$("#showMonthSpendGraphId").click(function(){
+							ajaxGetMonthDataGrahp($("#yearNumId2").text(),$("#monthNumId2").text());
+						});
+						
+						//点击年度 消费 比后 调用 ajax 给 heighchart 提供年度 消费比重 情况 数据
+						$("#showYearSpendGraph").click(function(){
+							ajaxGetMonthDataGrahp($("#yearNumId3").text(),"");
+						});
 						
 					});
+					
+//获取 绘制 饼图 某年 某月 数据
+function ajaxGetMonthDataGrahp(yearNum,monthNum){
+	$.ajax({
+		url:"${pageContext.request.contextPath }/yearAndMonthGraph.action",
+		type:"get",
+		dataType:"json",
+		data:"yearNum="+yearNum+"&userId=${sessionScope.user.id }"+"&monthNum="+monthNum,
+		success:function(){
+		},
+		error:function(){}
+	});
+	
+}
+//获取 绘制 图标 数据 的ajax函数
+function ajaxGetYearDataGraph(yearNum){
+	$.ajax({
+		url:"${pageContext.request.contextPath }/yearGraph.action",
+		type:"get",
+		dataType:"json",
+		data:"yearNum="+yearNum+"&userId=${sessionScope.user.id }",
+		success : function(data){
+		console.log(data);
+			var title = {
+			      text: yearNum+'年度收支情况'   
+		   };
+		   var subtitle = {
+		      text: 'Source: financing.com'
+		   };
+		   var xAxis = {
+		      categories: ['一月', '二月', '三月', '四月', '五月', '六月',
+		         '七月', '八月', '九月', '十月', '十一月', '十二月']
+		   };
+		   var yAxis = {
+		      title: {
+		         text: '人民币￥ (\元)'
+		      }
+		   };
+		   var plotOptions = {
+		      line: {
+		         dataLabels: {
+		            enabled: true
+		         },   
+		         enableMouseTracking: false
+		      }
+		   };
+		   var Arrayspend = new Array(12);
+		   var Arrayincome = new Array(12);
+		   //将对应 月份 数据 赋值到 对应 数组下标
+		   for(var i=0;i < Arrayspend.length;i++){
+		   		Arrayspend[i] = 0;
+		   }
+		   for(var k=0;k < data.spendNum.length;k++){
+		   	var a = data.spendNum[k].month_num;
+		   	a--;
+		   	Arrayspend[a] = data.spendNum[k].totalNum;
+		   	console.log(data.spendNum[k].month_num+" 哈哈哈 "+k);
+		   }
+		   
+		   for(var i=0;i < Arrayincome.length;i++){
+		   		Arrayincome[i] = 0;
+		   }
+		   for(var i=0;i < data.incomeNum.length;i++){
+		   	var a = data.spendNum[i].month_num;
+		   	a--;
+		   	Arrayincome[a] = data.incomeNum[i].totalNum;
+		   	console.log(data.incomeNum[i].month_num+" 哦哦哦 "+i);
+		   }
+		   
+		   console.log("支出:"+Arrayspend+"  收入:"+Arrayincome);
+		   var series= [{
+		         name: '支出',
+		         data: Arrayspend,
+		         color:'red'
+		      }, {
+		         name: '收入',
+		         data: Arrayincome
+		      }
+		   ];
+		   
+		   var json = {};
+		
+		   json.title = title;
+		   json.subtitle = subtitle;
+		   json.xAxis = xAxis;
+		   json.yAxis = yAxis;  
+		   json.series = series;
+		   json.plotOptions = plotOptions;
+		  
+		   $('#real_spendAndIncomeBody').highcharts(json);
+		},
+		error : function(){}
+	});
+	
+}
 
 //定义一个全局变量  记住 总页数
 var globalTotalPages = 0;
@@ -333,12 +528,12 @@ function isPageBorderNext(currentPageId,btnId){
 }
 
 	//分页 jq+ajax 实现 函数  主要  参数 currentPage 告诉 后台 我要找 第几页的数据 （调用 该函数 前 先 调用 边界判断 函数 只有 在 不是 边界的情况下 才调用 该函数）
-	function ajaxPagefunction(currentPage,currentPageId,tableId){
+	function ajaxPagefunction(currentPage,currentPageId,tableId,date){
 		//用户登录页面 执行 ajax函数 去查找 该用户 对应的recordInfo表中 有多少条数据 可以显示 几页 规定 每页 5条数据
 		$.ajax({
 			url:"${pageContext.request.contextPath }/recordInfo/queryAllrecord.action",
 			type:"post",
-			data:"userId=${sessionScope.user.id}&currentPage="+currentPage,
+			data:"userId=${sessionScope.user.id}&currentPage="+currentPage+"&date="+date,
 			dataType:"json",//服务器返回数据 为 json数据
 			success:function(data){
 				//操作成功后 更新  当前页标签中

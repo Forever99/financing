@@ -22,6 +22,8 @@
 	src="${pageContext.request.contextPath }/js/jquery.date_input.pack.js">
 	
 </script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/js/highcharts.js">
+</script>
 <script type="text/javascript" src="${pageContext.request.contextPath }/js/index.js.jsp">
 </script>
 <link href="${pageContext.request.contextPath }/css/index.css" rel="stylesheet">
@@ -120,11 +122,12 @@
 					</ul></li>
 
 				<li class="dropdown"><a href="#" id="a_id_graphs"
-					class="dropdown-toggle" data-toggle="dropdown">财务报表 <b
+					class="dropdown-toggle" data-toggle="dropdown">财务统计 <b
 						class="caret"></b></a>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
-						<li><a href="#payoutGraphs" tabindex="-1" data-toggle="tab">支出报表</a></li>
-						<li><a href="#incomeGraphs" tabindex="-1" data-toggle="tab">收入报表</a></li>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1"> 
+						<li><a href="#spendAndIncomeGraphs" tabindex="-1" data-toggle="tab" id="showSpendIncomeGraphId">收支报表</a></li>
+						<li><a href="#spendGraphs" tabindex="-1" data-toggle="tab" id="showMonthSpendGraphId">月份消费比</a></li>
+						<li><a href="#spendYearGraphs" tabindex="-1" data-toggle="tab" id="showYearSpendGraph">年度消费比</a></li>
 					</ul></li>
 				<li><a href="#wishList" data-toggle="tab" id="a_id_wishList">心愿单</a></li>
 			</ul>
@@ -344,12 +347,54 @@
 
 						</div>
 						<!-- 报表div -->
-						<div class="tab-pane fade" id="payoutGraphs">
-							<div style="background: yellow; height: 300px;"></div>
+						<div class="tab-pane fade" id="spendAndIncomeGraphs">
+							<div style="height: 520px;">
+								<div class="panel panel-info">
+									  <div class="panel-heading"><b id="titleYearId">2017</b>年度收支报表</div>
+									  <div class="panel-body" style="height:500px;">选择年份：
+									  	<button class="btn btn-default" id="yearsubId"><span class="glyphicon glyphicon-chevron-left"></span></button>
+									  	 <font style="color: #009fe8; font-size: 18px;"><b id="yearNumId">2017</b></font>
+									  	<button class="btn btn-default" id="yearaddId"><span class="glyphicon glyphicon-chevron-right"></span></button>
+									   <!-- 图标显示 -->
+									   	<div id="real_spendAndIncomeBody" style="width:800px;height:420px;margin:auto;background-color:pink;"></div>
+									  </div>
+								</div>
+							</div>
 						</div>
-						<div class="tab-pane fade" id="incomeGraphs">
-							<div style="background: red; height: 300px;"></div>
+						<div class="tab-pane fade" id="spendGraphs">
+							<div style="background: red; height: 520px;">
+								<div class="panel panel-success"> 
+									  <div class="panel-heading"><b id="titleYearId2">2017</b>年度<b id="titleMonthId">12</b>月各消费类别比重</div>
+									  <div class="panel-body" style="height:500px;">选择时间：
+									  	<button class="btn btn-default" id="yearsubId2"><span class="glyphicon glyphicon-chevron-left"></span></button>
+									  	 <font style="color: #009fe8; font-size: 18px;"><b id="yearNumId2">2017</b></font>
+									  	<button class="btn btn-default" id="yearaddId2"><span class="glyphicon glyphicon-chevron-right"></span></button>
+									  	<button class="btn btn-default" id="monthsubId2"><span class="glyphicon glyphicon-chevron-left"></span></button>
+									  	 <font style="color: #009fe8; font-size: 18px;"><b id="monthNumId2">12</b></font>
+									  	<button class="btn btn-default" id="monthaddId2"><span class="glyphicon glyphicon-chevron-right"></span></button>
+									  	<button class="btn btn-default" id="yearMonthBtnId">查看</button>
+									   <!-- 图标显示 -->
+									   	<div id="real_spendAndIncomeBody2" style="width:800px;height:420px;margin:auto;background-color:pink;"></div>
+									  </div>
+								</div>
+							</div>
 						</div>
+						
+						<div id="spendYearGraphs" class="tab-pane fade">
+							<div style="background: pink; height: 520px;">
+								<div class="panel panel-default"> 
+									  <div class="panel-heading"><b id="titleYearId3">2017</b>年度各消费类别比重</div>
+									  <div class="panel-body" style="height:500px;">选择年份：
+									  	<button class="btn btn-default" id="yearsubId3"><span class="glyphicon glyphicon-chevron-left"></span></button>
+									  	 <font style="color: #009fe8; font-size: 18px;"><b id="yearNumId3">2017</b></font>
+									  	<button class="btn btn-default" id="yearaddId3"><span class="glyphicon glyphicon-chevron-right"></span></button>
+									   <!-- 图标显示 -->
+									   	<div id="real_spendAndIncomeBody3" style="width:800px;height:420px;margin:auto;background-color:pink;"></div>
+									  </div>
+								</div>
+							</div>
+						</div>
+						
 						<div class="tab-pane fade" id="wishList">
 							<p>心愿单</p>
 						</div>

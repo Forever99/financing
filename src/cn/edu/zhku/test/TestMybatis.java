@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import cn.edu.zhku.pojo.IncomeCategory;
 import cn.edu.zhku.pojo.IncomeRecord;
 import cn.edu.zhku.pojo.RecordInfo;
+import cn.edu.zhku.pojo.SelectSumPojo;
 import cn.edu.zhku.pojo.SpendRecord;
 import cn.edu.zhku.pojo.User;
 import cn.edu.zhku.service.IncomeService;
@@ -210,6 +211,36 @@ public class TestMybatis {
 		for(RecordInfo info:list) {
 			System.out.println((SingleDateFormat.getDateToString(info.getDate())));
 		}
-		
 	}
+	@Test
+	public void testreturnValue() {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("year", 2017);
+		map.put("id",1);
+		map.put("spend", "spend");
+		List<SelectSumPojo> list = spendService.queryMonthNumdata(map);
+		for(SelectSumPojo ss:list) {
+			System.out.println(ss.getMonth_num()+"月份: "+ss.getTotalNum());
+		}
+		
+		map.put("spend",null);
+		List<SelectSumPojo> list2 = spendService.queryMonthNumdata(map);
+		for(SelectSumPojo ss:list2) {
+			System.out.println(ss.getMonth_num()+"月份: "+ss.getTotalNum());
+		}
+	}
+	
+	@Test
+	public void testreturnValue2() {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("year", 2017);
+		map.put("id",1);
+		map.put("month", 12);
+		
+		List<SelectSumPojo> list = spendService.queryMonthCateData(map);
+		for(SelectSumPojo ss:list) {
+			System.out.println(ss.getMonth_num()+"月份 类别："+ss.getCate_name()+" 花费："+ss.getTotalNum());
+		}
+	}
+	
 }

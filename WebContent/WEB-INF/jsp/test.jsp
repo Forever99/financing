@@ -201,7 +201,7 @@ p {
 	
 	
 <!-- 测试 提交表单后 刷新 局部页面 更新数据 提高用户体验度    测试结果是可以的 -->
-<!DOCTYPE html>
+<%-- <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -212,6 +212,8 @@ p {
 	rel="stylesheet">
 <script
 	src="${pageContext.request.contextPath }/js/bootstrap/3.3.6/bootstrap.min.js">
+</script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/js/Hightcharts/code/highcharts.js">
 </script>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -301,4 +303,91 @@ p {
  			<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span>添加类别</button>
  		</label>
 </div>
-</body> 
+</body>  --%>
+
+
+<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<script
+	src="${pageContext.request.contextPath }/js/jquery/2.0.0/jquery.min.js"></script>
+<link
+	href="${pageContext.request.contextPath }/css/bootstrap/3.3.6/bootstrap.min.css"
+	rel="stylesheet">
+<script
+	src="${pageContext.request.contextPath }/js/bootstrap/3.3.6/bootstrap.min.js">
+</script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/js/highcharts.js">
+</script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var options = {
+				target:'#reloaddiv'
+		};
+		$("#submitform").submit(function(){
+			alert("绑定form提交事件");
+			$(this).ajaxSubmit(options);
+			return false;
+		});
+		$("#btnTest").click(function(){
+			$(this).css("background-color","gray");
+			alert($("#select_value").val());
+		});
+		
+		var title = {
+				text:"每月平均气温"
+		};
+		var subtitle = {
+				text:"source:runboo.com"
+		};
+		var aa = ["一月","二月","三月","四月","五月","六月"]
+		var xAxis = {
+				categories:aa
+		};
+		var yAxis = {
+				title:{
+					text:"摄氏度(\xB0C)"
+				}
+		};
+		var plotOptions = {
+		      line: {
+		         dataLabels: {
+		            enabled: true
+		         },   
+		         enableMouseTracking: false
+		      }
+		};
+		var series= [{
+	         name: 'Tokyo',
+	         data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5]
+	      }, {
+	         name: 'London',
+	         data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2]
+	      }
+	   ];
+		
+		var json = {};
+		json.title = title;
+		json.subtitle = subtitle;
+		json.xAxis = xAxis;
+		json.yAxis = yAxis;
+		json.series = series;
+		json.plotOptions = plotOptions;
+		$("#container").highcharts(json);
+		
+		console.log("come in");
+	});
+</script>
+<style>
+#container {
+	maring: auto;
+	width: 100%;
+	height:500px;
+	background-color: pink;
+}
+
+</style>
+<body>
+	<div id="container">1212</div>
+</dody>

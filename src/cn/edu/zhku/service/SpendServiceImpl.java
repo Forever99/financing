@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import cn.edu.zhku.mapper.RecordInfoMapper;
 import cn.edu.zhku.mapper.SpendMapper;
 import cn.edu.zhku.pojo.RecordInfo;
+import cn.edu.zhku.pojo.SelectSumPojo;
 import cn.edu.zhku.pojo.SpendCategory;
 import cn.edu.zhku.pojo.SpendRecord;
 
@@ -74,6 +75,16 @@ public class SpendServiceImpl implements SpendService{
 	@Override
 	public List<SpendRecord> querySpendRecordByDateUserId(Map map) {
 		return spendMapper.querySpendRecordByDateUserId(map);
+	}
+
+	@Override
+	public List<SelectSumPojo> queryMonthNumdata(Map map) {
+		return spendMapper.queryMonthNumdata(map);
+	}
+
+	@Override
+	public List<SelectSumPojo> queryMonthCateData(Map map) {
+		return spendMapper.queryMonthCateData(map);
 	}
 
 }

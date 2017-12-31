@@ -1,6 +1,5 @@
 package cn.edu.zhku.controller;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import cn.edu.zhku.pojo.IncomeRecord;
 import cn.edu.zhku.pojo.RecordInfo;
+import cn.edu.zhku.pojo.SelectSumPojo;
 import cn.edu.zhku.pojo.SpendRecord;
 import cn.edu.zhku.service.IncomeService;
 import cn.edu.zhku.service.RecordInfoService;
@@ -120,6 +119,42 @@ public class GlobalController {
 		
 		//用 fastjson 第三方包 将 list转换为 json格式的 字符串 就不用自己 很辛苦拼了
 		return jsonstr3;
+	}
+	//mysql 时间处理函数 强大啊  http://blog.sina.com.cn/s/blog_4cd978f90102wby4.html	
+/*	select sum(num) as '共有' from test 
+	where userid = 1 and YEAR(date)='2017' and MONTH(date)='12';  找出 2017年 12月份 userid为 1的人的数据！！！*/
+	@RequestMapping(value="/yearGraph")
+	@ResponseBody
+	public String getYearData(String yearNum,String userId) {
+		System.out.println("ysernum="+yearNum+"  userid="+userId);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("year", null);
+		map.put("id", null);
+		if(yearNum!=null && !"".equals(yearNum)) {
+			map.put("year", yearNum);
+		}
+		if(userId!=null && !"".equals(userId)) {
+			map.put("id", userId);
+		}
+		//统计该用户 在 具体一年中 每个月消费的数据量
+		map.put("spend", "spend");
+		List<SelectSumPojo> spendList = spendService.queryMonthNumdata(map);
+		//将数据 打印出来看看
+		for(SelectSumPojo spend:spendList) {
+			System.out.println(spend.getMonth_num()+"月份： "+" 消费了："+spend.getTotalNum());
+		}
+		//获取 该用户 在该年 每个月 的输入
+		map.put("spend", null);//控制 mapper.xml选择 执行 查收入的sql语句
+		List<SelectSumPojo> incomeList = spendService.queryMonthNumdata(map);//将 查询 收入的记录 也放在 spend表中  不好 但是 现在 先将功能实行了再说!2017年12月31日16:40:10  马上跨年了啊哈
+		//将数据 打印出来看看
+		for(SelectSumPojo income:incomeList) {
+			System.out.println(income.getMonth_num()+"月份： "+" 收入了:"+income.getTotalNum());
+		}
+		Map<String,Object> map2 = new HashMap<String,Object>();
+		map2.put("spendNum", spendList);
+		map2.put("incomeNum", incomeList);
+		String jsonstr = JSON.toJSONString(map2);
+		return jsonstr;
 	}
 }
 

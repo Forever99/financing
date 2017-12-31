@@ -70,4 +70,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 	</select>
 	
+	<select id="queryMonthNumdata" parameterType="java.util.Map" resultType="SelectSumPojo">
+		<choose>
+			<when test="spend!=null">
+				select MONTH(date) as month_num , sum(spendnum) as totalNum
+				from spend_record
+				where user_id=#{id}
+				<if test="year!=null">
+					and YEAR(date)=#{year}
+				</if>
+				group by MONTH(date)
+			</when>
+			<otherwise>
+				select MONTH(date) as month_num , sum(incomenum) as totalNum
+				from income_record
+				where user_id=#{id}
+				<if test="year!=null">
+					and YEAR(date)=#{year}
+				</if>
+				group by MONTH(date)
+			</otherwise>
+		</choose>
+		
+	</select>
+	
+	<select id="queryMonthCateData" resultType="SelectSumPojo" parameterType="map">
+		select sum(spendnum) as totalNum,MONTH(date) as month_num,spend_category.name as cate_name
+		from spend_record,spend_category
+		where user_id=#{id} and spend_record.s_category_id=spend_category.id
+		<if test="year!=null">
+			and YEAR(date)=#{year}
+		</if>
+		<if test="month!=null">
+			and MONTH(date)=#{month}
+		</if>
+		group by spend_category.id
+	</select>
+	
 </mapper>

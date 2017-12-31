@@ -47,6 +47,7 @@ public class RecordInfoController {
 		Map<String,Object> map1 = new HashMap<String,Object>();
 		map1.put("user_id", userId);
 		map1.put("pagesize", null);
+		map1.put("date", null);
 		if(date!=null) {
 			map1.put("date", date);
 		}
