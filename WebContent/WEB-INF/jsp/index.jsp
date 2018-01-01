@@ -72,7 +72,7 @@
 							<c:when test="${not empty sessionScope.user }">
 								<div id="singin_head_in_right_in_other">
 									<div
-										style="height: 20px; margin-top: 5px; width: 110px; float: left;">
+										style="height: 20px; margin-top: 5px; width: 140px; float: left;">
 										<font style="color: #009fe8; font-size: 18px;">欢迎
 											：${user.username }</font>
 									</div>
@@ -356,13 +356,13 @@
 									  	 <font style="color: #009fe8; font-size: 18px;"><b id="yearNumId">2017</b></font>
 									  	<button class="btn btn-default" id="yearaddId"><span class="glyphicon glyphicon-chevron-right"></span></button>
 									   <!-- 图标显示 -->
-									   	<div id="real_spendAndIncomeBody" style="width:800px;height:420px;margin:auto;background-color:pink;"></div>
+									   	<div id="real_spendAndIncomeBody" style="width:800px;height:420px;margin:auto;"></div>
 									  </div>
 								</div>
 							</div>
 						</div>
 						<div class="tab-pane fade" id="spendGraphs">
-							<div style="background: red; height: 520px;">
+							<div style="height: 520px;">
 								<div class="panel panel-success"> 
 									  <div class="panel-heading"><b id="titleYearId2">2017</b>年度<b id="titleMonthId">12</b>月各消费类别比重</div>
 									  <div class="panel-body" style="height:500px;">选择时间：
@@ -374,14 +374,14 @@
 									  	<button class="btn btn-default" id="monthaddId2"><span class="glyphicon glyphicon-chevron-right"></span></button>
 									  	<button class="btn btn-default" id="yearMonthBtnId">查看</button>
 									   <!-- 图标显示 -->
-									   	<div id="real_spendAndIncomeBody2" style="width:800px;height:420px;margin:auto;background-color:pink;"></div>
+									   	<div id="real_spendAndIncomeBody2" style="width:800px;height:420px;margin:auto;"></div>
 									  </div>
 								</div>
 							</div>
 						</div>
 						
 						<div id="spendYearGraphs" class="tab-pane fade">
-							<div style="background: pink; height: 520px;">
+							<div style="height: 520px;">
 								<div class="panel panel-default"> 
 									  <div class="panel-heading"><b id="titleYearId3">2017</b>年度各消费类别比重</div>
 									  <div class="panel-body" style="height:500px;">选择年份：
@@ -389,7 +389,7 @@
 									  	 <font style="color: #009fe8; font-size: 18px;"><b id="yearNumId3">2017</b></font>
 									  	<button class="btn btn-default" id="yearaddId3"><span class="glyphicon glyphicon-chevron-right"></span></button>
 									   <!-- 图标显示 -->
-									   	<div id="real_spendAndIncomeBody3" style="width:800px;height:420px;margin:auto;background-color:pink;"></div>
+									   	<div id="real_spendAndIncomeBody3" style="width:800px;height:420px;margin:auto;"></div>
 									  </div>
 								</div>
 							</div>

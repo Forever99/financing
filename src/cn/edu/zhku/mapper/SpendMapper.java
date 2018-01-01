@@ -20,5 +20,5 @@ public interface SpendMapper {
 	public SpendRecord querySpendRecord(int id);
 	public List<SpendRecord> querySpendRecordByDateUserId(Map map);
 	public List<SelectSumPojo> queryMonthNumdata(Map map);
-	public List<SelectSumPojo> queryMonthCateData(Map map);
+	public List<SelectSumPojo> querySpendCateData(Map map);
 }

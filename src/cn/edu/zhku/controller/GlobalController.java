@@ -156,6 +156,22 @@ public class GlobalController {
 		String jsonstr = JSON.toJSONString(map2);
 		return jsonstr;
 	}
+	
+	@RequestMapping(value="/yearAndMonthGraph")
+	@ResponseBody
+	public String getYearMonthData(String yearNum,String userId,String monthNum) {
+		System.out.println(yearNum+"  "+userId+"  "+monthNum);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id", userId);
+		map.put("year", yearNum);
+		map.put("month", null);
+		if(monthNum!=null && !"".equals(monthNum)) {
+			map.put("month", monthNum);
+		}
+		List<SelectSumPojo> spendList = spendService.querySpendCateData(map);
+		String jsonstr = JSON.toJSONString(spendList);
+		return jsonstr;
+	}
 }
 
 

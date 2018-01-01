@@ -338,7 +338,7 @@
 							$("#yearNumId3").text(year);
 							$("#titleYearId3").text(year);
 							//调用 ajax 函数
-							ajaxGetMonthDataGrahp(year,"");
+							ajaxGetMonthDataGrahp(year,"real_spendAndIncomeBody3","");
 						});
 						$("#yearaddId3").click(function(){
 							var year = $("#yearNumId3").text();
@@ -346,12 +346,12 @@
 							$("#yearNumId3").text(year);
 							$("#titleYearId3").text(year);
 							//调用 ajax 函数
-							ajaxGetMonthDataGrahp(year,"");
+							ajaxGetMonthDataGrahp(year,"real_spendAndIncomeBody3","");
 						});
 						
 						//点击 查看 按钮 显示 饼图
 						$("#yearMonthBtnId").click(function(){
-							ajaxGetMonthDataGrahp($("#yearNumId2").text(),$("#monthNumId2").text());
+							ajaxGetMonthDataGrahp($("#yearNumId2").text(),"real_spendAndIncomeBody2",$("#monthNumId2").text());
 						});
 						
 						//点击显示 收支报表后  调用 ajax 给 heighchart 提供年度 收支情况 数据
@@ -361,24 +361,89 @@
 						 
 						//点击月份消费比 后 调用 ajax 给 heighchart 提供年度具体某月的 消费比重 情况 数据
 						$("#showMonthSpendGraphId").click(function(){
-							ajaxGetMonthDataGrahp($("#yearNumId2").text(),$("#monthNumId2").text());
+							ajaxGetMonthDataGrahp($("#yearNumId2").text(),"real_spendAndIncomeBody2",$("#monthNumId2").text());
 						});
 						
 						//点击年度 消费 比后 调用 ajax 给 heighchart 提供年度 消费比重 情况 数据
 						$("#showYearSpendGraph").click(function(){
-							ajaxGetMonthDataGrahp($("#yearNumId3").text(),"");
+							ajaxGetMonthDataGrahp($("#yearNumId3").text(),"real_spendAndIncomeBody3","");
 						});
 						
 					});
 					
 //获取 绘制 饼图 某年 某月 数据
-function ajaxGetMonthDataGrahp(yearNum,monthNum){
+function ajaxGetMonthDataGrahp(yearNum,graphDiv,monthNum){
+	var title2 = yearNum+"年度消费各类别金额占有比例";
+	if(monthNum!=null && monthNum!=""){
+		title2 = yearNum+"年度"+monthNum+"月份消费各类别金额占有比例"
+	}
+	 
 	$.ajax({
 		url:"${pageContext.request.contextPath }/yearAndMonthGraph.action",
 		type:"get",
 		dataType:"json",
 		data:"yearNum="+yearNum+"&userId=${sessionScope.user.id }"+"&monthNum="+monthNum,
-		success:function(){
+		success:function(data){
+			console.log(data);
+			if(data==null || data.length==0){
+				$('#'+graphDiv).html("<font style='color:red;'><h3 align='center'>没有数据</h3></font>"); 
+			}else{
+				var chart = {
+		       plotBackgroundColor: null,
+		       plotBorderWidth: null,
+		       plotShadow: false
+		   };
+		   var title = {
+		      text: title2   
+		   };      
+		   var tooltip = {
+		      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+		   };
+		   var plotOptions = {
+		      pie: {
+		         allowPointSelect: true,
+		         cursor: 'pointer',
+		         dataLabels: {
+		            enabled: true,
+		            format: '<b>{point.name}%</b>: {point.percentage:.1f} %',
+		            style: {
+		               color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+		            }
+		         }
+		      }
+		   };
+		   //计算比例
+		   var alltotal = 0;
+		   for(var i=0;i < data.length;i++){
+		   	alltotal+=data[i].totalNum;
+		   }
+		   var dataArray = [];
+		   for(var i=0;i < data.length;i++){
+		   	var temp1 = data[i].cate_name;
+		   	var temp2 = data[i].totalNum/alltotal;
+		   		if(i!=data.length-1){
+		   			dataArray.push({name:temp1,y:temp2});
+		   		}else{
+		   			dataArray.push({name:temp1,y:temp2,sliced:true,selected:true});
+		   		}
+	   			
+		   }
+		   //console.log(dataArray);
+		   var series= [{
+		      type: 'pie',
+		      name: '消费类别金额比例',
+		      data: dataArray
+		   }];     
+		   var json = {};   
+		   json.chart = chart; 
+		   json.title = title;     
+		   json.tooltip = tooltip;  
+		   json.series = series;
+		   json.plotOptions = plotOptions;
+		   $('#'+graphDiv).highcharts(json); 
+			}
+			
+			
 		},
 		error:function(){}
 	});
@@ -426,7 +491,6 @@ function ajaxGetYearDataGraph(yearNum){
 		   	var a = data.spendNum[k].month_num;
 		   	a--;
 		   	Arrayspend[a] = data.spendNum[k].totalNum;
-		   	console.log(data.spendNum[k].month_num+" 哈哈哈 "+k);
 		   }
 		   
 		   for(var i=0;i < Arrayincome.length;i++){
@@ -436,10 +500,9 @@ function ajaxGetYearDataGraph(yearNum){
 		   	var a = data.spendNum[i].month_num;
 		   	a--;
 		   	Arrayincome[a] = data.incomeNum[i].totalNum;
-		   	console.log(data.incomeNum[i].month_num+" 哦哦哦 "+i);
 		   }
 		   
-		   console.log("支出:"+Arrayspend+"  收入:"+Arrayincome);
+		   //console.log("支出:"+Arrayspend+"  收入:"+Arrayincome);
 		   var series= [{
 		         name: '支出',
 		         data: Arrayspend,
@@ -592,8 +655,8 @@ function isPageBorderNext(currentPageId,btnId){
 			contentType:"application/json;charset=utf-8",
 			success:function(data){
 		console.log(data);
-		console.log(new Date(data.incomelist[0].date).Format("yyyy-MM-dd"));
-		<!-- 调用 前面给 Date类型定义的format 函数   进行 毫秒值 转换为 日期格式  console.log(data[0].comment+" "+new Date(data[0].date).Format("yyyy-MM-dd")); -->
+		//console.log(new Date(data.incomelist[0].date).Format("yyyy-MM-dd"));
+		// 调用 前面给 Date类型定义的format 函数   进行 毫秒值 转换为 日期格式  console.log(data[0].comment+" "+new Date(data[0].date).Format("yyyy-MM-dd"));
 				//根据 data 做控制     
 				if(data.spendnum!=null || data.spendnum!=""){
 					$("#table1_spendId").text(data.spendnum);

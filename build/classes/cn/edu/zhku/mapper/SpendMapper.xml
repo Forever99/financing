@@ -94,7 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 	</select>
 	
-	<select id="queryMonthCateData" resultType="SelectSumPojo" parameterType="map">
+	<select id="querySpendCateData" resultType="SelectSumPojo" parameterType="map">
 		select sum(spendnum) as totalNum,MONTH(date) as month_num,spend_category.name as cate_name
 		from spend_record,spend_category
 		where user_id=#{id} and spend_record.s_category_id=spend_category.id

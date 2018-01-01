@@ -83,8 +83,8 @@ public class SpendServiceImpl implements SpendService{
 	}
 
 	@Override
-	public List<SelectSumPojo> queryMonthCateData(Map map) {
-		return spendMapper.queryMonthCateData(map);
+	public List<SelectSumPojo> querySpendCateData(Map map) {
+		return spendMapper.querySpendCateData(map);
 	}
 
 }

@@ -65,7 +65,7 @@
     foreign key (i_category_id) references income_category(id)
     )Engine=InnoDB default charset=utf8;
     
-  f)月消费记录表
+  f)月消费记录表   (已删除 不需要)
   create table month_spend_record(
     id int not null primary key auto_increment,
     totalnum int not null comment '月消费总额',
@@ -76,7 +76,7 @@
     foreign key (user_id) references user(id)
    )Engine=InnoDB default charset=utf8;
    
-   g)年消费记录表
+   g)年消费记录表 (已删除 不需要)
    create table year_spend_record(
     id int not null primary key auto_increment,
     totalnum int not null comment '年消费总额',
@@ -87,7 +87,7 @@
     foreign key (user_id) references user(id)
    )Engine=InnoDB default charset=utf8;
    
-  h)年收入记录表
+  h)年收入记录表  (已删除 不需要)
   create table year_income_record(
   id int not null primary key auto_increment,
   totalnum int not null comment '年收入总额',
@@ -98,7 +98,7 @@
   foreign key (user_id) references user(id)
   )Engine=InnoDB default charset=utf8;
   
- i)心愿单表
+ i)心愿单表 (还未开发 空表)
  create table wishlist(
   id int not null primary key auto_increment,
   w_comment varchar(255) comment '心愿单说明',

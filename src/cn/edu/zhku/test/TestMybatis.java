@@ -237,7 +237,7 @@ public class TestMybatis {
 		map.put("id",1);
 		map.put("month", 12);
 		
-		List<SelectSumPojo> list = spendService.queryMonthCateData(map);
+		List<SelectSumPojo> list = spendService.querySpendCateData(map);
 		for(SelectSumPojo ss:list) {
 			System.out.println(ss.getMonth_num()+"月份 类别："+ss.getCate_name()+" 花费："+ss.getTotalNum());
 		}
